@@ -108,7 +108,7 @@ const Onboarding = () => {
       setStep2Error(""); // Clear error if validation
     } else if (step === 3) {
       const conditions = profile.conditions;
-      if (!conditions.pcos && !conditions.thyroid && !conditions.diabetes) {
+      if (!conditions.pcos && !conditions.thyroid && !conditions.diabetes && !conditions.none) {
         setStep3Error("Please select at least one health condition");
         return;
       }
