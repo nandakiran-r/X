@@ -1,13 +1,13 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Calendar as CalendarIcon, 
-  DropletIcon, 
-  MoonIcon, 
+import { DayContentProps } from 'react-day-picker';
+import {
+  Calendar as CalendarIcon,
+  DropletIcon,
+  MoonIcon,
   SmileIcon,
   FrownIcon,
   MehIcon,
@@ -18,6 +18,24 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { useToast } from "@/components/ui/use-toast";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { DayContent } from "react-day-picker";
+
+// Define interfaces for our data structures
+interface PeriodEntry {
+  date: string;
+  flow: string;
+}
+
+interface SymptomEntry {
+  date: string;
+  mood: string | null;
+  symptoms: string[];
+}
+
+interface TrackerData {
+  periods: PeriodEntry[];
+  symptoms: Record<string, SymptomEntry>;
+}
 
 const Tracker = () => {
   const { toast } = useToast();
@@ -26,13 +44,100 @@ const Tracker = () => {
   const [mood, setMood] = useState<string | null>(null);
   const [flow, setFlow] = useState<string | null>(null);
   const [symptoms, setSymptoms] = useState<string[]>([]);
+  const [trackerData, setTrackerData] = useState<TrackerData>({
+    periods: [],
+    symptoms: {}
+  });
+
+  const dateKey = date.toISOString().split('T')[0];
 
   const availableSymptoms = [
-    "Cramps", "Bloating", "Headache", "Fatigue", 
+    "Cramps", "Bloating", "Headache", "Fatigue",
     "Acne", "Mood swings", "Tender breasts", "Backache"
   ];
 
+  // Load data from localStorage on component mount
+  useEffect(() => {
+    const savedData = localStorage.getItem('trackerData');
+    if (savedData) {
+      try {
+        const parsedData = JSON.parse(savedData);
+        setTrackerData(parsedData);
+      } catch (error) {
+        console.error('Error parsing tracker data from localStorage', error);
+        // Initialize with empty data if parsing fails
+        setTrackerData({
+          periods: [],
+          symptoms: {}
+        });
+      }
+    }
+  }, []);
+
+  // Load current day's data when date changes
+  useEffect(() => {
+    const currentDateKey = date.toISOString().split('T')[0];
+
+    // Check if we have symptom data for this date
+    const symptomData = trackerData.symptoms[currentDateKey];
+    if (symptomData) {
+      setMood(symptomData.mood);
+      setSymptoms(symptomData.symptoms);
+    } else {
+      // Reset if no data
+      setMood(null);
+      setSymptoms([]);
+    }
+
+    // Check if we have period data for this date
+    const periodData = trackerData.periods.find(p => p.date === currentDateKey);
+    if (periodData) {
+      setFlow(periodData.flow);
+    } else {
+      setFlow(null);
+    }
+  }, [date, trackerData]);
+
+  // Save data to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('trackerData', JSON.stringify(trackerData));
+  }, [trackerData]);
+
   const handleLogPeriod = () => {
+    if (!flow) {
+      toast({
+        title: "Flow intensity required",
+        description: "Please select a flow intensity",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const newPeriodEntry: PeriodEntry = {
+      date: dateKey,
+      flow: flow
+    };
+
+    // Check if an entry for this date already exists
+    const existingEntryIndex = trackerData.periods.findIndex(p => p.date === dateKey);
+
+    if (existingEntryIndex >= 0) {
+      // Update existing entry
+      const updatedPeriods = [...trackerData.periods];
+      updatedPeriods[existingEntryIndex] = newPeriodEntry;
+
+      setTrackerData({
+        ...trackerData,
+        periods: updatedPeriods
+      });
+    } else {
+      // Add new entry
+      setTrackerData({
+        ...trackerData,
+        periods: [...trackerData.periods, newPeriodEntry]
+      });
+    }
+
     toast({
       title: "Period Logged",
       description: `You've logged your period for ${date.toLocaleDateString()}`,
@@ -48,6 +153,20 @@ const Tracker = () => {
   };
 
   const handleSaveSymptoms = () => {
+    const newSymptomEntry: SymptomEntry = {
+      date: dateKey,
+      mood,
+      symptoms
+    };
+
+    setTrackerData({
+      ...trackerData,
+      symptoms: {
+        ...trackerData.symptoms,
+        [dateKey]: newSymptomEntry
+      }
+    });
+
     toast({
       title: "Symptoms Logged",
       description: "Your symptoms have been saved",
@@ -60,6 +179,70 @@ const Tracker = () => {
 
   const nextMonth = () => {
     setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1));
+  };
+
+  // Function to check if a date has period data
+  const isPeriodDay = (day: Date) => {
+    const dayStr = day.toISOString().split('T')[0];
+    return trackerData.periods.some(p => p.date === dayStr);
+  };
+
+  // Calculate fertility window and ovulation day (simplified example)
+  const getFertilityInfo = () => {
+    // Sort periods by date
+    if (trackerData.periods.length === 0) return null;
+
+    const sortedPeriods = [...trackerData.periods].sort((a, b) =>
+      new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
+
+    // Use the most recent period as reference
+    const lastPeriod = new Date(sortedPeriods[sortedPeriods.length - 1].date);
+
+    // Estimated ovulation day (14 days after period start in a 28-day cycle)
+    const ovulationDay = new Date(lastPeriod);
+    ovulationDay.setDate(lastPeriod.getDate() + 14);
+
+    // Fertility window (5 days before ovulation + day of ovulation)
+    const fertilityStart = new Date(ovulationDay);
+    fertilityStart.setDate(ovulationDay.getDate() - 5);
+
+    return {
+      ovulation: ovulationDay.toISOString().split('T')[0],
+      fertilityWindow: Array.from({ length: 6 }, (_, i) => {
+        const day = new Date(fertilityStart);
+        day.setDate(fertilityStart.getDate() + i);
+        return day.toISOString().split('T')[0];
+      })
+    };
+  };
+
+  const fertilityInfo = getFertilityInfo();
+
+  // Custom DayContent component for the calendar
+  const CustomDayContent = (props: DayContentProps) => {
+    const { date, activeModifiers } = props;
+    const dayStr = date.toISOString().split('T')[0];
+    let className = "h-8 w-8 p-0 font-normal flex items-center justify-center";
+
+    // Check if this day has a period entry
+    if (isPeriodDay(date)) {
+      className += " bg-red-400 text-white rounded-full";
+    }
+    // Check if this is ovulation day
+    else if (fertilityInfo && dayStr === fertilityInfo.ovulation) {
+      className += " bg-blue-400 text-white rounded-full";
+    }
+    // Check if this is in the fertility window
+    else if (fertilityInfo && fertilityInfo.fertilityWindow.includes(dayStr)) {
+      className += " bg-purple-400 text-white rounded-full";
+    }
+
+    return (
+      <div className={className}>
+        <DayContent {...props} />
+      </div>
+    );
   };
 
   return (
@@ -244,6 +427,10 @@ const Tracker = () => {
                   selected={date}
                   onSelect={(date) => date && setDate(date)}
                   className="rounded-md border"
+                  month={currentMonth}
+                  components={{
+                    DayContent: CustomDayContent as any // Use 'as any' to bypass type checking if necessary
+                  }}
                 />
                 <div className="mt-4">
                   <div className="flex items-center mb-2">
