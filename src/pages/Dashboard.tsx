@@ -1,35 +1,52 @@
-
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { AlertCircle, Calendar, Plus, Droplet, Moon, Activity, ExternalLink } from "lucide-react";
+import {
+  AlertCircle,
+  Calendar,
+  Plus,
+  Droplet,
+  Moon,
+  Activity,
+  ExternalLink,
+} from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-
+import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
   const { toast } = useToast();
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [cycleDay, setCycleDay] = useState<number | null>(null);
   const [nextPeriod, setNextPeriod] = useState<string | null>(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     // Load profile data
     const profileData = localStorage.getItem("sakhi-profile");
     if (profileData) {
       setProfile(JSON.parse(profileData));
+    } else {
+      navigate("/onboarding");
     }
-    
+
     // Simulate loading cycle data
     setTimeout(() => {
       setCycleDay(15);
-      
+
       // Calculate next period date (sample)
       const today = new Date();
       const nextDate = new Date(today);
       nextDate.setDate(today.getDate() + 14); // Assuming 14 days until next period
-      setNextPeriod(nextDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' }));
-      
+      setNextPeriod(
+        nextDate.toLocaleDateString("en-US", { month: "long", day: "numeric" })
+      );
+
       setLoading(false);
     }, 1000);
   }, []);
@@ -46,7 +63,9 @@ const Dashboard = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-t-primary border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading your personalized dashboard...</p>
+          <p className="text-muted-foreground">
+            Loading your personalized dashboard...
+          </p>
         </div>
       </div>
     );
@@ -62,7 +81,9 @@ const Dashboard = () => {
         <h1 className="text-2xl font-bold mb-2">
           {profile ? `Hello, ${profile.name}` : "Hello"}
         </h1>
-        <p className="text-muted-foreground mb-6">Here's your health overview</p>
+        <p className="text-muted-foreground mb-6">
+          Here's your health overview
+        </p>
       </motion.div>
 
       <motion.div
@@ -77,22 +98,26 @@ const Dashboard = () => {
               <div>
                 <h3 className="font-medium">Cycle Day</h3>
                 <div className="text-3xl font-bold">{cycleDay}</div>
-                <p className="text-sm text-muted-foreground">Next period: {nextPeriod}</p>
+                <p className="text-sm text-muted-foreground">
+                  Next period: {nextPeriod}
+                </p>
               </div>
               <div className="w-16 h-16 rounded-full bg-sakhi-lavender flex items-center justify-center">
                 <Calendar className="h-8 w-8 text-primary-foreground" />
               </div>
             </div>
             <div className="mt-4 flex space-x-2">
-              <Button 
+              <Button
                 onClick={handleLogPeriod}
-                size="sm" 
+                size="sm"
                 className="bg-sakhi-pink hover:bg-sakhi-pink/90 text-secondary-foreground"
               >
                 <Plus className="h-4 w-4 mr-1" />
                 Log Period
               </Button>
-              <Button variant="outline" size="sm">View Cycle</Button>
+              <Button variant="outline" size="sm">
+                View Cycle
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -144,7 +169,10 @@ const Dashboard = () => {
             <CardDescription>Based on your dosha profile</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="mb-3">Drink warm ginger tea with a pinch of cinnamon to improve digestion and balance hormones naturally.</p>
+            <p className="mb-3">
+              Drink warm ginger tea with a pinch of cinnamon to improve
+              digestion and balance hormones naturally.
+            </p>
             <Button variant="link" className="p-0 text-primary-foreground">
               Learn more
               <ExternalLink className="h-4 w-4 ml-1" />

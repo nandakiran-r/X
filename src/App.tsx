@@ -14,6 +14,7 @@ import Remedies from "./pages/Remedies";
 import Chat from "./pages/Chat";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import Login from "./pages/Login";
 
 // Import layouts
 import AppShell from "./components/layout/AppShell";
@@ -29,6 +30,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Welcome />} />
           <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/login" element={<Login />} />
           
           {/* Protected routes wrapped in AppShell */}
           <Route path="/dashboard" element={<AppShell><Dashboard /></AppShell>} />
