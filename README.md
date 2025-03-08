@@ -1,69 +1,101 @@
-# Welcome to your Lovable project
 
-## Project info
+# Define 3.0
+The official template repository for Define 3.0
 
-**URL**: https://lovable.dev/projects/dd8ea49d-2443-4df5-86dc-3c035e56f9f3
+![DefineHack 2025 Logo](https://github.com/user-attachments/assets/8173bc16-418e-4912-b500-c6427e4ba4b6)
 
-## How can I edit this code?
 
-There are several ways of editing your application.
 
-**Use Lovable**
+# HerSakhi
+ Cover Image  If applicable
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/dd8ea49d-2443-4df5-86dc-3c035e56f9f3) and start prompting.
+### Team Information
+- **Team Name**: X
+- **Track**: Ai in Ayush
 
-Changes made via Lovable will be committed automatically to this repo.
+### Team Members
+| Name | Role | GitHub | LinkedIn |
+|------|------|--------|----------|
+| Nandakiran R | Backend | [@nandakiran-r](https://github.com/nandakiran-r) | [Profile](https://www.linkedin.com/in/nandakiran-r) |
+| Muhammed Shamil | Frontent | [@muhammedshamil8](https://github.com/muhammedshamil8) | [Profile](https://www.linkedin.com/in/muhammed-shamil-65878227a/) |
+| Muhammed Rizwan | ppt & ui/u | [@rizwnkt](https://github.com/rizwnkt) | [Profile](https://www.linkedin.com/in/mhdrizwankt/) |
+| Alex | Ai&Ml | [@Alexjmathew](https://github.com/Alexjmathew) | [Profile](https://linkedin.com/in/username) |
 
-**Use your preferred IDE**
+## Project Details
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Overview
+_A concise summary of your project (2-3 sentences)_
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Problem Statement
+_Describe the problem your project aims to solve_
 
-Follow these steps:
+### Solution
+_Explain your approach to solving the problem_
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Demo
+[![Project Demo](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=VIDEO_ID)
+_Replace VIDEO_ID with your YouTube video ID or provide an alternative demo link_
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Live Project
+[HerSakhi](https://hersakhi.vercel.app)
 
-# Step 3: Install the necessary dependencies.
-npm i
+## Technical Implementation
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+### Technologies Used
+- **Frontend**: React js
+- **Backend**: Nodejs
+- **Database**: Firebase
+- **APIs**: [Technologies]
+- **DevOps**: [Technologies]
+- **Other Tools**: [Technologies]
+
+### Key Features
+- Feature 1
+- Feature 2
+- Feature 3
+
+## Setup Instructions
+
+### Prerequisites
+- Requirement 1
+- Requirement 2
+- Requirement 3
+
+### Installation 
+```bash
+
 ```
 
-**Edit a file directly in GitHub**
+### Running the Project
+```bash
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```
 
-**Use GitHub Codespaces**
+## Additional Resources
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Project Timeline
+_Brief overview of your development process and milestones_
 
-## What technologies are used for this project?
+### Challenges Faced
+_Discuss technical challenges and how you overcame them_
 
-This project is built with .
+### Future Enhancements
+_Share your vision for future development_
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### References (if any)
+- [Reference 1](link)
+- [Reference 2](link)
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/dd8ea49d-2443-4df5-86dc-3c035e56f9f3) and click on Share -> Publish.
+### Submission Checklist
+- [ ] Completed all sections of this README
+- [ ] Added project demo video
+- [ ] Provided live project link
+- [ ] Ensured all team members are listed
+- [ ] Included setup instructions
+- [ ] Submitted final code to repository
 
-## I want to use a custom domain - is that possible?
+---
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+© Define 3.0 | [Define 3.0](https://www.define3.xyz/)
