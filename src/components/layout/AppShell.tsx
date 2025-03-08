@@ -4,6 +4,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "@/config/firebase";
 import { Home, Calendar, Activity, MessageCircle, User } from "lucide-react";
+import { signOut } from "firebase/auth";
 
 const AppShell = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
@@ -28,6 +29,8 @@ const AppShell = ({ children }: { children: React.ReactNode }) => {
           setIsOnboarded(false);
         }
       } else {
+        await signOut(auth);
+        localStorage.clear();
         localStorage.removeItem("sakhi-uid");
         localStorage.removeItem("sakhi-profile");
         setIsOnboarded(false);
@@ -71,9 +74,11 @@ const AppShell = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex flex-col min-h-screen bg-background">
       {!hideNavigation && (
-        <header 
+        <header
           className={`fixed top-0 left-0 right-0 z-10 transition-all duration-300 ${
-            isScrolled ? "bg-background/80 backdrop-blur-md shadow-sm" : "bg-transparent"
+            isScrolled
+              ? "bg-background/80 backdrop-blur-md shadow-sm"
+              : "bg-transparent"
           }`}
         >
           <div className="container px-4 h-16 flex items-center justify-between">
@@ -101,7 +106,14 @@ const AppShell = ({ children }: { children: React.ReactNode }) => {
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <item.icon size={20} className={location.pathname === item.path ? "animate-pulse-gentle" : ""} />
+                <item.icon
+                  size={20}
+                  className={
+                    location.pathname === item.path
+                      ? "animate-pulse-gentle"
+                      : ""
+                  }
+                />
                 <span className="text-xs mt-1">{item.label}</span>
               </button>
             ))}
