@@ -6,20 +6,20 @@ The official template repository for Define 3.0
 
 
 
-# < Project Name >
+# HerSakhi
  Cover Image  If applicable
 
 ### Team Information
-- **Team Name**: <Team Name> 
-- **Track**: < Track >
+- **Team Name**: X
+- **Track**: Ai in Ayush
 
 ### Team Members
 | Name | Role | GitHub | LinkedIn |
 |------|------|--------|----------|
-| [Full Name] | [Role] | [@username](https://github.com/username) | [Profile](https://linkedin.com/in/username) |
-| [Full Name] | [Role] | [@username](https://github.com/username) | [Profile](https://linkedin.com/in/username) |
-| [Full Name] | [Role] | [@username](https://github.com/username) | [Profile](https://linkedin.com/in/username) |
-| [Full Name] | [Role] | [@username](https://github.com/username) | [Profile](https://linkedin.com/in/username) |
+| Nandakiran R | [Backend] | [@nandakiran-r](https://github.com/nandakiran-r) | [Profile](https://www.linkedin.com/in/nandakiran-r) |
+| Muhammed Shamil | [Frontent] | [@muhammedshamil8](https://github.com/muhammedshamil8) | [Profile](https://www.linkedin.com/in/muhammed-shamil-65878227a/) |
+| Muhammed Rizwan | [ppt & ui/ux] | [@rizwnkt](https://github.com/rizwnkt) | [Profile](https://www.linkedin.com/in/mhdrizwankt/) |
+| Alex | [Ai&Ml] | [@username](https://github.com/username) | [Profile](https://linkedin.com/in/username) |
 
 ## Project Details
 
@@ -37,14 +37,14 @@ _Explain your approach to solving the problem_
 _Replace VIDEO_ID with your YouTube video ID or provide an alternative demo link_
 
 ### Live Project
-[Project Name](https://your-project-url.com)
+[HerSakhi](https://hersakhi.vercel.app)
 
 ## Technical Implementation
 
 ### Technologies Used
-- **Frontend**: [Technologies]
-- **Backend**: [Technologies]
-- **Database**: [Technologies]
+- **Frontend**: React js
+- **Backend**: Nodejs
+- **Database**: Firebase
 - **APIs**: [Technologies]
 - **DevOps**: [Technologies]
 - **Other Tools**: [Technologies]
