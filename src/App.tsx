@@ -1,226 +1,152 @@
-import React, { useState, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { Leaf, Flower2, Wind, Sun, Droplets, ArrowRight } from 'lucide-react';
-import { useInView } from 'react-intersection-observer';
-import Navbar from './components/Navbar';
-import HerbalCard from './components/HerbalCard';
-import CircleAnimation from './components/CircleAnimation';
-import ProductCard from './components/ProductCard';
-import TestimonialCard from './components/TestimonialCard';
-import SplashScreen from './components/SplashScreen';
+import React from 'react';
+import { Heart, Leaf, Cog as Yoga, Flower2, ScrollText, ArrowRight, Users, Phone } from 'lucide-react';
 
 function App() {
-  const [showSplash, setShowSplash] = useState(true);
-  const { scrollYProgress } = useScroll();
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.5]);
-  
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
-
-  const fadeIn = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
-  };
-
-  if (showSplash) {
-    return <SplashScreen isVisible={showSplash} onComplete={() => setShowSplash(false)} />;
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-green-100">
-      <Navbar />
-      
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
       {/* Hero Section */}
-      <div className="relative h-screen flex items-center justify-center overflow-hidden">
-        <CircleAnimation />
-        <div className="relative z-10 text-center px-4">
-          <motion.h1 
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-6xl font-bold text-green-800 mb-6"
-          >
-            AYUSH India
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="text-xl text-green-700 max-w-2xl mx-auto mb-8"
-          >
-            Discover the ancient wisdom of Ayurveda for modern wellness
-          </motion.p>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-green-600 text-white px-8 py-3 rounded-full hover:bg-green-700 transition-colors flex items-center mx-auto"
-          >
-            Explore Now <ArrowRight className="ml-2 w-5 h-5" />
-          </motion.button>
-        </div>
-      </div>
+      <header className="relative overflow-hidden">
+        <nav className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Leaf className="h-8 w-8 text-green-600" />
+              <span className="text-2xl font-bold text-green-800">AYUSH</span>
+            </div>
+            <div className="hidden md:flex space-x-8">
+              <a href="#about" className="text-gray-600 hover:text-green-600">About</a>
+              <a href="#services" className="text-gray-600 hover:text-green-600">Services</a>
+              <a href="#hersakhi" className="text-gray-600 hover:text-green-600">HerSakhi</a>
+              <a href="#contact" className="text-gray-600 hover:text-green-600">Contact</a>
+            </div>
+          </div>
+        </nav>
 
-      {/* Features Section */}
-      <motion.div 
-        ref={ref}
-        initial="hidden"
-        animate={inView ? "visible" : "hidden"}
-        variants={fadeIn}
-        className="py-20 px-4 bg-white/80 backdrop-blur-sm"
-      >
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <HerbalCard 
-            icon={<Leaf className="w-8 h-8 text-green-600" />}
-            title="Natural Herbs"
-            description="Pure and authentic medicinal herbs sourced from organic farms"
-          />
-          <HerbalCard 
-            icon={<Flower2 className="w-8 h-8 text-purple-600" />}
-            title="Traditional Wisdom"
-            description="Ancient Ayurvedic practices adapted for modern lifestyle"
-          />
-          <HerbalCard 
-            icon={<Wind className="w-8 h-8 text-blue-600" />}
-            title="Holistic Healing"
-            description="Balance of body, mind, and spirit through natural remedies"
-          />
-          <HerbalCard 
-            icon={<Sun className="w-8 h-8 text-yellow-600" />}
-            title="Daily Wellness"
-            description="Integrate Ayurvedic principles into your daily routine"
-          />
-        </div>
-      </motion.div>
-
-      {/* Products Section */}
-      <div className="py-20 px-4 bg-green-50">
-        <div className="max-w-6xl mx-auto">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="text-4xl font-bold text-green-800 text-center mb-12"
-          >
-            Popular Products
-          </motion.h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <ProductCard
-              image="https://images.unsplash.com/photo-1515377905703-c4788e51af15?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-              title="Organic Ashwagandha"
-              price="₹499"
-              rating={5}
-              description="Premium quality Ashwagandha root powder for stress relief and immunity"
-            />
-            <ProductCard
-              image="https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-              title="Tulsi Green Tea"
-              price="₹299"
-              rating={4}
-              description="Blend of holy basil and green tea for natural detoxification"
-            />
-            <ProductCard
-              image="https://images.unsplash.com/photo-1509358271058-acd22cc93898?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-              title="Neem Extract"
-              price="₹399"
-              rating={5}
-              description="Pure Neem extract for skin health and natural immunity"
-            />
+        <div className="container mx-auto px-6 pt-20 pb-24">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h1 className="text-5xl font-bold text-gray-900 leading-tight mb-6">
+                Holistic Healing Through Ancient Wisdom
+              </h1>
+              <p className="text-xl text-gray-600 mb-8">
+                Discover the power of traditional Indian medicine systems with AYUSH - 
+                integrating Ayurveda, Yoga, Unani, Siddha, and Homoeopathy for complete wellness.
+              </p>
+              <button className="bg-green-600 text-white px-8 py-3 rounded-full font-semibold 
+                hover:bg-green-700 transition duration-300 flex items-center space-x-2">
+                <span>Get Started</span>
+                <ArrowRight className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="relative">
+              <img
+                src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b"
+                alt="Meditation and Wellness"
+                className="rounded-2xl shadow-xl"
+              />
+            </div>
           </div>
         </div>
-      </div>
+      </header>
 
-      {/* Testimonials Section */}
-      <div className="py-20 px-4">
-        <div className="max-w-6xl mx-auto">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="text-4xl font-bold text-green-800 text-center mb-12"
-          >
-            What Our Customers Say
-          </motion.h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <TestimonialCard
-              name="Priya Sharma"
-              role="Yoga Instructor"
-              content="The quality of AYUSH products has transformed my daily wellness routine. My students have noticed the difference too!"
-              image="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-            />
-            <TestimonialCard
-              name="Rajesh Kumar"
-              role="Wellness Coach"
-              content="As a wellness coach, I highly recommend AYUSH products to all my clients. The results speak for themselves."
-              image="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-            />
-            <TestimonialCard
-              name="Anita Patel"
-              role="Ayurveda Practitioner"
-              content="Finally found a brand that truly understands and respects the principles of Ayurveda. Exceptional quality!"
-              image="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Contact Section */}
-      <div className="py-20 px-4 bg-white/80 backdrop-blur-sm">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="text-4xl font-bold text-green-800 mb-8"
-          >
-            Begin Your Wellness Journey
-          </motion.h2>
-          <p className="text-lg text-green-700 mb-8">
-            Join thousands of others who have discovered the power of Ayurvedic healing
-          </p>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-green-600 text-white px-8 py-3 rounded-full hover:bg-green-700 transition-colors"
-          >
-            Contact Us
-          </motion.button>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <footer className="bg-green-800 text-white py-12">
-        <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div>
-            <h3 className="text-xl font-bold mb-4">AYUSH India</h3>
-            <p className="text-green-200">
-              Bringing ancient wisdom to modern wellness through authentic Ayurvedic solutions.
+      {/* HerSakhi Initiative Section */}
+      <section id="hersakhi" className="py-20 bg-green-50">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <div className="flex justify-center mb-4">
+              <Heart className="h-12 w-12 text-pink-500" />
+            </div>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">HerSakhi Initiative</h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Empowering women through holistic healthcare and wellness support
             </p>
           </div>
-          <div>
-            <h4 className="font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-green-200 hover:text-white">About Us</a></li>
-              <li><a href="#" className="text-green-200 hover:text-white">Products</a></li>
-              <li><a href="#" className="text-green-200 hover:text-white">Blog</a></li>
-              <li><a href="#" className="text-green-200 hover:text-white">Contact</a></li>
-            </ul>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white p-8 rounded-xl shadow-lg">
+              <Users className="h-10 w-10 text-green-600 mb-4" />
+              <h3 className="text-xl font-semibold mb-3">Community Support</h3>
+              <p className="text-gray-600">Connect with other women and share your wellness journey</p>
+            </div>
+            <div className="bg-white p-8 rounded-xl shadow-lg">
+              <ScrollText className="h-10 w-10 text-green-600 mb-4" />
+              <h3 className="text-xl font-semibold mb-3">Expert Guidance</h3>
+              <p className="text-gray-600">Access to qualified AYUSH practitioners and resources</p>
+            </div>
+            <div className="bg-white p-8 rounded-xl shadow-lg">
+              <Flower2 className="h-10 w-10 text-green-600 mb-4" />
+              <h3 className="text-xl font-semibold mb-3">Holistic Care</h3>
+              <p className="text-gray-600">Comprehensive wellness programs tailored for women</p>
+            </div>
           </div>
-          <div>
-            <h4 className="font-semibold mb-4">Products</h4>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-green-200 hover:text-white">Herbs</a></li>
-              <li><a href="#" className="text-green-200 hover:text-white">Supplements</a></li>
-              <li><a href="#" className="text-green-200 hover:text-white">Oils</a></li>
-              <li><a href="#" className="text-green-200 hover:text-white">Teas</a></li>
-            </ul>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section id="services" className="py-20">
+        <div className="container mx-auto px-6">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <img
+                src="https://images.unsplash.com/photo-1614485376769-c5ffa84f8363"
+                alt="Ayurvedic Treatment"
+                className="rounded-2xl shadow-xl"
+              />
+            </div>
+            <div>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">Our Healing Traditions</h2>
+              <div className="space-y-6">
+                <div className="flex items-start space-x-4">
+                  <div className="bg-green-100 p-3 rounded-lg">
+                    <Leaf className="h-6 w-6 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2">Ayurveda</h3>
+                    <p className="text-gray-600">Ancient healing wisdom for mind, body, and spirit balance</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <div className="bg-green-100 p-3 rounded-lg">
+                    <Yoga className="h-6 w-6 text-green-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2">Yoga & Naturopathy</h3>
+                    <p className="text-gray-600">Natural healing through yoga and lifestyle modifications</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div>
-            <h4 className="font-semibold mb-4">Connect</h4>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-green-200 hover:text-white">Facebook</a></li>
-              <li><a href="#" className="text-green-200 hover:text-white">Instagram</a></li>
-              <li><a href="#" className="text-green-200 hover:text-white">Twitter</a></li>
-              <li><a href="#" className="text-green-200 hover:text-white">LinkedIn</a></li>
-            </ul>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="bg-green-900 text-white py-20">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-12">
+            <Phone className="h-12 w-12 mx-auto mb-4" />
+            <h2 className="text-4xl font-bold mb-4">Connect With Us</h2>
+            <p className="text-xl opacity-90">Start your wellness journey today</p>
+          </div>
+          <div className="max-w-lg mx-auto">
+            <button className="w-full bg-white text-green-900 py-3 rounded-full font-semibold 
+              hover:bg-green-100 transition duration-300">
+              Schedule a Consultation
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-green-950 text-white py-8">
+        <div className="container mx-auto px-6">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="flex items-center space-x-2 mb-4 md:mb-0">
+              <Leaf className="h-6 w-6" />
+              <span className="text-xl font-bold">AYUSH</span>
+            </div>
+            <div className="text-sm opacity-75">
+              © 2024 AYUSH. All rights reserved.
+            </div>
           </div>
         </div>
       </footer>
