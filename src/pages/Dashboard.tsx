@@ -31,6 +31,7 @@ const Dashboard = () => {
     const profileData = localStorage.getItem("sakhi-profile");
     if (profileData) {
       setProfile(JSON.parse(profileData));
+      console.log("Profile data loaded",profileData);
     } else {
       navigate("/onboarding");
     }

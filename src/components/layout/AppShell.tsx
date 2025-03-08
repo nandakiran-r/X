@@ -1,6 +1,8 @@
-
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "@/config/firebase";
 import { Home, Calendar, Activity, MessageCircle, User } from "lucide-react";
 
 const AppShell = ({ children }: { children: React.ReactNode }) => {
@@ -8,28 +10,50 @@ const AppShell = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOnboarded, setIsOnboarded] = useState(false);
+  const [loading, setLoading] = useState(true); // To prevent flickering during auth check
 
-  // Check if user is onboarded
   useEffect(() => {
-    const onboardingStatus = localStorage.getItem("sakhi-onboarded");
-    setIsOnboarded(onboardingStatus === "true");
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const uid = user.uid;
+        localStorage.setItem("sakhi-uid", uid);
+
+        // Fetch user data from Firestore
+        const userDoc = await getDoc(doc(db, "users", uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          localStorage.setItem("sakhi-profile", JSON.stringify(userData));
+          setIsOnboarded(true);
+        } else {
+          setIsOnboarded(false);
+        }
+      } else {
+        localStorage.removeItem("sakhi-uid");
+        localStorage.removeItem("sakhi-profile");
+        setIsOnboarded(false);
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
+
+  // Redirect to onboarding if not onboarded & not on the onboarding page
+  useEffect(() => {
+    if (!loading && !isOnboarded && location.pathname !== "/onboarding") {
+      navigate("/onboarding");
+    }
+  }, [loading, isOnboarded, location.pathname, navigate]);
 
   // Handle scroll effect for header
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
-    
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  // Show navigation only if user is onboarded
-  if (!isOnboarded && location.pathname !== "/onboarding") {
-    navigate("/onboarding");
-    return null;
-  }
 
   // Hide navigation on welcome and onboarding screens
   const hideNavigation = ["/", "/onboarding"].includes(location.pathname);
@@ -41,6 +65,8 @@ const AppShell = ({ children }: { children: React.ReactNode }) => {
     { path: "/chat", icon: MessageCircle, label: "Ask Sakhi" },
     { path: "/profile", icon: User, label: "Profile" },
   ];
+
+  if (loading) return null; // Prevent UI flickering during auth check
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
