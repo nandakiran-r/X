@@ -16,10 +16,10 @@ The official template repository for Define 3.0
 ### Team Members
 | Name | Role | GitHub | LinkedIn |
 |------|------|--------|----------|
-| Nandakiran R | [Backend] | [@nandakiran-r](https://github.com/nandakiran-r) | [Profile](https://www.linkedin.com/in/nandakiran-r) |
-| Muhammed Shamil | [Frontent] | [@muhammedshamil8](https://github.com/muhammedshamil8) | [Profile](https://www.linkedin.com/in/muhammed-shamil-65878227a/) |
-| Muhammed Rizwan | [ppt & ui/ux] | [@rizwnkt](https://github.com/rizwnkt) | [Profile](https://www.linkedin.com/in/mhdrizwankt/) |
-| Alex | [Ai&Ml] | [@username](https://github.com/username) | [Profile](https://linkedin.com/in/username) |
+| Nandakiran R | Backend | [@nandakiran-r](https://github.com/nandakiran-r) | [Profile](https://www.linkedin.com/in/nandakiran-r) |
+| Muhammed Shamil | Frontent | [@muhammedshamil8](https://github.com/muhammedshamil8) | [Profile](https://www.linkedin.com/in/muhammed-shamil-65878227a/) |
+| Muhammed Rizwan | ppt & ui/u | [@rizwnkt](https://github.com/rizwnkt) | [Profile](https://www.linkedin.com/in/mhdrizwankt/) |
+| Alex | Ai&Ml | [@Alexjmathew](https://github.com/Alexjmathew) | [Profile](https://linkedin.com/in/username) |
 
 ## Project Details
 
