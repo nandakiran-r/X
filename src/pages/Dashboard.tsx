@@ -26,31 +26,34 @@ const Dashboard = () => {
   const [cycleDay, setCycleDay] = useState<number | null>(null);
   const [nextPeriod, setNextPeriod] = useState<string | null>(null);
   const navigate = useNavigate();
+  
   useEffect(() => {
-    // Load profile data
+    // Load profile data from localStorage
     const profileData = localStorage.getItem("sakhi-profile");
+    
     if (profileData) {
-      setProfile(JSON.parse(profileData));
-      console.log("Profile data loaded",profileData);
-    } else {
-      navigate("/onboarding");
-    }
-
-    // Simulate loading cycle data
-    setTimeout(() => {
-      setCycleDay(15);
-
-      // Calculate next period date (sample)
+      const parsedProfile = JSON.parse(profileData);
+      setProfile(parsedProfile);
+  
+      console.log("Profile data loaded", parsedProfile);
+  
+      // Set cycle day correctly from profile
+      setCycleDay(parsedProfile.cycleLength);
+  
+      // Calculate next period date
       const today = new Date();
       const nextDate = new Date(today);
-      nextDate.setDate(today.getDate() + 14); // Assuming 14 days until next period
+      nextDate.setDate(today.getDate() + parsedProfile.cycleLength); // Use user's cycle length
       setNextPeriod(
         nextDate.toLocaleDateString("en-US", { month: "long", day: "numeric" })
       );
-
-      setLoading(false);
-    }, 1000);
+    } else {
+      navigate("/onboarding");
+    }
+  
+    setLoading(false);
   }, []);
+  
 
   const handleLogPeriod = () => {
     toast({
