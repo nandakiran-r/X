@@ -24,13 +24,13 @@ The official template repository for Define 3.0
 ## Project Details
 
 ### Overview
-_A concise summary of your project (2-3 sentences)_
+HerSakhi is an AI-powered Ayurvedic health tracker designed to support women's wellness. It enables menstrual and PCOS tracking, pregnancy and newborn care support, and provides affordable, natural healthcare solutions through AI-driven insights and Ayurvedic remedies.
 
 ### Problem Statement
-_Describe the problem your project aims to solve_
+Women often struggle with managing menstrual health, PCOS, pregnancy, and newborn care due to the lack of accessible, affordable, and natural healthcare options. Conventional healthcare solutions may be expensive, difficult to access, or not aligned with holistic wellness practices.
 
 ### Solution
-_Explain your approach to solving the problem_
+HerSakhi addresses this issue by integrating AI-powered cycle analysis, Ayurvedic home remedies, pregnancy and postpartum care guidance, and a chatbot for instant health advice. By combining technology with traditional healthcare wisdom, the platform ensures personalized, sustainable, and natural self-care solutions for women.
 
 ### Demo
 [![Project Demo](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=VIDEO_ID)
@@ -50,9 +50,9 @@ _Replace VIDEO_ID with your YouTube video ID or provide an alternative demo link
 - **Other Tools**: [Technologies]
 
 ### Key Features
-- Feature 1
-- Feature 2
-- Feature 3
+- **AI-Powered Cycle Tracking** – Smart menstrual and PCOS tracking with AI-driven insights for better health management.
+- **Ayurvedic Health Recommendations** – Personalized home-based Ayurvedic remedies for menstrual health, PCOS, pregnancy, and postpartum care.
+- **Smart Health Chatbot** – Instant AI-powered chatbot for quick health advice and Ayurvedic wellness support.
 
 ## Setup Instructions
 
