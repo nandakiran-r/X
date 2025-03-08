@@ -1,10 +1,10 @@
-
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SendIcon, Mic, MicOff } from "lucide-react";
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 // Define message type
 interface Message {
@@ -23,37 +23,133 @@ const defaultQuestions = [
   "How to improve sleep quality naturally?"
 ];
 
-// Sample responses
-const sampleResponses: Record<string, string> = {
-  "What foods help with PCOS?": 
-    "For PCOS, focus on anti-inflammatory foods like leafy greens, berries, and fatty fish. Include cinnamon, turmeric, and flaxseeds which may help balance hormones. Limit processed foods, refined carbs, and sugars as they can worsen insulin resistance. A diet rich in fiber and healthy fats is beneficial.",
-  "How can I reduce bloating naturally?": 
-    "To reduce bloating naturally, try drinking ginger or fennel tea, both of which aid digestion. Avoid gas-producing foods like beans, carbonated drinks, and certain vegetables. Stay hydrated and eat smaller, more frequent meals. Gentle yoga poses like Cat-Cow and Child's pose can also help relieve gas and bloating.",
-  "Which Ayurvedic herbs balance hormones?": 
-    "Ayurvedic herbs that help balance hormones include Shatavari (supports female reproductive system), Ashwagandha (regulates cortisol and reduces stress), Triphala (supports digestion and elimination of toxins), and Brahmi (balances the nervous system). Always consult with an Ayurvedic practitioner before starting any herbal supplements.",
-  "Best yoga poses for period pain?": 
-    "For period pain relief, try these gentle yoga poses: Supta Baddha Konasana (Reclined Butterfly) to relieve tension in the pelvic area, Cat-Cow to improve circulation to the reproductive organs, Child's Pose to relax the lower back, and Supported Bridge Pose with a bolster for abdominal comfort. Practice these poses with slow, deep breathing.",
-  "How to improve sleep quality naturally?": 
-    "To improve sleep naturally, establish a regular sleep schedule and create a calming bedtime routine. Try drinking warm milk with nutmeg or ashwagandha before bed. Avoid electronic devices 1-2 hours before sleeping. Practice meditation or gentle yoga to relax your mind. Keep your bedroom cool, dark, and quiet for optimal sleep conditions."
-};
+// Chat history storage
+const STORAGE_KEY = 'sakhi_chat_history';
 
-// Generate a response based on user question
-const generateResponse = (question: string): string => {
-  // Check for exact matches in our predefined responses
-  if (sampleResponses[question]) {
-    return sampleResponses[question];
+// Gemini API integration function with Ayurvedic principles
+const getGeminiResponse = async (userMessage: string, chatHistory: Message[]) => {
+  const API_KEY = import.meta.env.VITE_GEMINI_API;
+  const genAI = new GoogleGenerativeAI(API_KEY);
+
+  try {
+    // Configure the model - use Gemini-1.5-pro for best results with this use case
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
+    
+    // Prepare chat history for Gemini in the required format
+    const formattedHistory = chatHistory
+      .filter(msg => msg.id !== "welcome") // Skip the welcome message
+      .map(msg => ({
+        role: msg.sender === 'user' ? 'user' : 'model',
+        parts: [{ text: msg.content }],
+      }));
+    
+    // Create a chat session with system prompt focused on Ayurvedic principles
+    const chat = model.startChat({
+      history: [
+        {
+          role: 'user',
+          parts: [{ text: 'I need advice related to Ayurvedic health principles.' }],
+        },
+        {
+          role: 'model',
+          parts: [
+            {
+              text:
+                "I understand you're seeking information about Ayurvedic health principles. I'm here to provide holistic wellness guidance based on traditional Ayurvedic practices. How can I assist you today?",
+            },
+          ],
+        },
+        {
+          role: 'user',
+          parts: [
+            {
+              text: `You are Sakhi, an Ayurvedic health assistant providing evidence-based information grounded in traditional Ayurvedic medicine and holistic wellness.
+              
+              IMPORTANT GUIDELINES:
+              - Frame responses within Ayurvedic principles (Vata, Pitta, Kapha doshas)
+              - Provide holistic, non-judgmental information about diet, lifestyle, and natural remedies
+              - Emphasize the mind-body connection in health according to Ayurvedic tradition
+              - Include specific Ayurvedic herbs, foods, and practices when relevant
+              - For specific medical questions, always recommend consulting Ayurvedic practitioners or healthcare providers
+              - Keep responses concise (under 150 words) and easy to understand
+              - Focus on traditional Ayurvedic approaches to balance and wellness
+              - If user appears to need medical attention, suggest seeking professional care
+              
+              KEY TOPICS TO ADDRESS:
+              - Dietary recommendations according to dosha types
+              - Herbal remedies and natural supplements
+              - Daily routines (dinacharya) for optimal health
+              - Seasonal practices (ritucharya) for balance
+              - Women's health through Ayurvedic principles
+              - Digestion and gut health (Agni concept)
+              - Detoxification practices (Panchakarma principles)
+              
+              Focus on providing practical, compassionate, and traditionally-grounded Ayurvedic guidance for holistic wellness.`
+            },
+          ],
+        },
+        ...formattedHistory, // Add the conversation history
+      ],
+      generationConfig: {
+        maxOutputTokens: 1000,
+        temperature: 0.4, // Lower temperature for more consistent, factual responses
+      },
+    });
+    
+    // Send the user's message and wait for a response
+    const result = await chat.sendMessage(userMessage);
+    const response = result.response.text();
+    return response;
+  } catch (error) {
+    console.error('Gemini API Error:', error);
+    return "I apologize, but I'm having trouble connecting to my Ayurvedic knowledge base. Please try again or consult with an Ayurvedic practitioner for personalized guidance.";
   }
-  
-  // Generate a generic response for other questions
-  return "Based on Ayurvedic principles, this is something you might want to discuss with a qualified practitioner. Would you like me to suggest some general wellness practices instead?";
 };
 
 const Chat = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
+  // State for messages with persistence
+  const [messages, setMessages] = useState<Message[]>(() => {
+    // Try to load messages from localStorage on initial render
+    try {
+      const savedMessages = localStorage.getItem(STORAGE_KEY);
+      if (savedMessages) {
+        // Parse the saved messages and convert string timestamps back to Date objects
+        const parsed = JSON.parse(savedMessages);
+        return parsed.map((msg: any) => ({
+          ...msg,
+          timestamp: new Date(msg.timestamp)
+        }));
+      }
+    } catch (error) {
+      console.error('Error loading chat history:', error);
+    }
+    return []; // Return empty array if no saved messages or error
+  });
+  
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Add initial welcome message if no messages exist
+  useEffect(() => {
+    if (messages.length === 0) {
+      const welcomeMessage: Message = {
+        id: "welcome",
+        content: "Namaste! I'm Sakhi, your Ayurvedic wellness guide. How can I support your health journey today?",
+        sender: 'sakhi',
+        timestamp: new Date()
+      };
+      setMessages([welcomeMessage]);
+    }
+  }, [messages.length]);
+
+  // Save messages to localStorage whenever they change
+  useEffect(() => {
+    if (messages.length > 0) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+    }
+  }, [messages]);
 
   // Scroll to bottom of messages
   useEffect(() => {
@@ -71,13 +167,15 @@ const Chat = () => {
       timestamp: new Date()
     };
     
-    setMessages(prev => [...prev, userMessage]);
+    // Update messages state with new user message
+    const updatedMessages = [...messages, userMessage];
+    setMessages(updatedMessages);
     setInput("");
     setIsLoading(true);
     
-    // Simulate AI response delay
-    setTimeout(() => {
-      const response = generateResponse(userMessage.content);
+    try {
+      // Get response from Gemini API with current conversation history
+      const response = await getGeminiResponse(input, updatedMessages);
       
       const sakhiMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -86,9 +184,21 @@ const Chat = () => {
         timestamp: new Date()
       };
       
+      // Update messages with AI response
       setMessages(prev => [...prev, sakhiMessage]);
+    } catch (error) {
+      // Handle errors
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        content: "I'm sorry, I couldn't process your Ayurvedic wellness inquiry. Please try again later or consult with an Ayurvedic practitioner for immediate guidance.",
+        sender: 'sakhi',
+        timestamp: new Date()
+      };
+      
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -119,19 +229,43 @@ const Chat = () => {
     }
   };
 
+  const clearChatHistory = () => {
+    // Keep only the welcome message
+    const welcomeMessage: Message = {
+      id: "welcome",
+      content: "Namaste! I'm Sakhi, your Ayurvedic wellness guide. How can I support your health journey today?",
+      sender: 'sakhi',
+      timestamp: new Date()
+    };
+    
+    setMessages([welcomeMessage]);
+    localStorage.removeItem(STORAGE_KEY);
+  };
+
   return (
     <div className="container px-4 py-6 max-w-md mx-auto h-[calc(100vh-8rem)] flex flex-col">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="mb-4"
+        className="mb-4 flex justify-between items-center"
       >
-        <h1 className="text-2xl font-bold mb-2">Ask Sakhi</h1>
-        <p className="text-muted-foreground">Your Ayurvedic health assistant</p>
+        <div>
+          <h1 className="text-2xl font-bold mb-2">Ask Sakhi</h1>
+          <p className="text-muted-foreground">Your Ayurvedic health assistant</p>
+        </div>
+        {messages.length > 1 && (
+          <Button 
+            variant="ghost" 
+            onClick={clearChatHistory}
+            className="text-xs"
+          >
+            Clear Chat
+          </Button>
+        )}
       </motion.div>
 
-      {messages.length === 0 ? (
+      {messages.length <= 1 ? (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -224,7 +358,7 @@ const Chat = () => {
           {isRecording ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
         </Button>
         <Input
-          placeholder="Type your question..."
+          placeholder="Ask about Ayurvedic health..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -232,7 +366,7 @@ const Chat = () => {
         />
         <Button
           onClick={handleSendMessage}
-          disabled={!input.trim()}
+          disabled={!input.trim() || isLoading}
           className="bg-sakhi-lavender text-primary-foreground hover:bg-sakhi-lavender/90"
         >
           <SendIcon className="h-5 w-5" />
