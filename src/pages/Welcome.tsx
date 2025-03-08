@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -16,12 +15,21 @@ const Welcome = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-sakhi-lavender/30 via-background to-sakhi-pink/30 p-6">
+    <div 
+      className="min-h-screen flex flex-col items-center justify-center p-6 relative"
+      style={{
+        backgroundImage: "url('/images/ayurveda-bg.jpg')", // Set Ayurveda-themed background
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundBlendMode: "overlay",
+        backgroundColor: "rgba(255, 248, 231, 0.6)", // Warm earthy tone overlay
+      }}
+    >
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="w-full max-w-md mx-auto text-center"
+        className="w-full max-w-md mx-auto text-center bg-white/70 p-6 rounded-xl shadow-lg"
       >
         <motion.div 
           initial={{ scale: 0.8, opacity: 0 }}
