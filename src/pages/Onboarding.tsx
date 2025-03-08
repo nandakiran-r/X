@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -8,12 +7,16 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+
+const MIN_AGE = 8; // Minimum age threshold for adolescence period
 
 const Onboarding = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [progress, setProgress] = useState(20);
+  const [ageError, setAgeError] = useState("");
   const [profile, setProfile] = useState({
     name: "",
     age: "",
@@ -29,6 +32,28 @@ const Onboarding = () => {
   });
 
   const nextStep = () => {
+    // Age validation when moving from step 1
+    if (step === 1) {
+      const age = parseInt(profile.age);
+      
+      if (!profile.age) {
+        setAgeError("Please enter your age");
+        return;
+      }
+      
+      if (isNaN(age)) {
+        setAgeError("Please enter a valid number");
+        return;
+      }
+      
+      if (age < MIN_AGE) {
+        setAgeError(`You must be at least ${MIN_AGE} years old to use this app`);
+        return;
+      }
+      
+      setAgeError(""); // Clear error if validation passes
+    }
+    
     const nextStepNumber = step + 1;
     setStep(nextStepNumber);
     setProgress(nextStepNumber * 20);
@@ -43,6 +68,11 @@ const Onboarding = () => {
 
   const updateProfile = (key: string, value: any) => {
     setProfile(prev => ({ ...prev, [key]: value }));
+    
+    // Clear age error when user updates the age field
+    if (key === "age") {
+      setAgeError("");
+    }
   };
 
   const updateCondition = (condition: string, value: boolean) => {
@@ -100,6 +130,16 @@ const Onboarding = () => {
                   placeholder="Enter your age"
                   className="mt-1"
                 />
+                <p className="text-xs text-muted-foreground mt-1">
+                  You must be at least {MIN_AGE} years old to use this app
+                </p>
+                
+                {ageError && (
+                  <Alert variant="destructive" className="mt-2">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>{ageError}</AlertDescription>
+                  </Alert>
+                )}
               </div>
             </div>
           </motion.div>
