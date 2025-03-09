@@ -39,6 +39,7 @@ HerSakhi addresses this issue by integrating AI-powered cycle analysis, Ayurvedi
 
 ### Live Project
 [HerSakhi](https://hersakhi.vercel.app)
+[HerSakhi Admin](https://hersakhi-admin.vercel.app)
 
 ## Technical Implementation
 
