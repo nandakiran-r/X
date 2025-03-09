@@ -81,8 +81,8 @@ const AppShell = ({ children }: { children: React.ReactNode }) => {
               : "bg-transparent"
           }`}
         >
-          <div className="container px-4 h-16 flex items-center justify-between">
-            <h1 className="text-lg font-semibold text-primary-foreground">
+          <div className="container px-4 h-16 flex items-center justify-between cursor-pointer">
+            <h1 className="text-lg font-semibold text-primary-foreground" onClick={() => navigate('/dashboard')}>
               Her<span className="text-secondary-foreground">Sakhi</span>
             </h1>
           </div>
