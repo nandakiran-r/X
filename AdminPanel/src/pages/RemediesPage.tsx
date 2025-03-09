@@ -11,7 +11,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Search, Plus, Edit, Trash2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-const categories = ["Menstrual Pain", "Hormonal Balance", "PCOS", "Menstrual Irregularity"];
+const categories = ["pcos", "period", "hormones", "wellness"];
 
 interface Remedy {
   id: string;
@@ -110,7 +110,7 @@ const RemediesPage = () => {
   };
 
   return (
-    <div className="admin-container space-y-6">
+    <div className="admin-container space-y-6 p-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Ayurvedic Remedies</h1>
         <Button onClick={handleAddNew}>
@@ -119,7 +119,14 @@ const RemediesPage = () => {
         </Button>
       </div>
 
-      <Input placeholder="Search remedies..." value={searchTerm} onChange={handleSearch} />
+      <div className="flex items-center gap-4">
+        <Input
+          placeholder="Search remedies..."
+          value={searchTerm}
+          onChange={handleSearch}
+          className="max-w-md"
+        />
+      </div>
 
       <Table>
         <TableHeader>
@@ -143,7 +150,12 @@ const RemediesPage = () => {
                   <Edit className="h-4 w-4 mr-1" />
                   Edit
                 </Button>
-                <Button variant="outline" size="sm" className="text-red-500" onClick={() => handleDelete(remedy.id)}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-red-500 ml-2"
+                  onClick={() => handleDelete(remedy.id)}
+                >
                   <Trash2 className="h-4 w-4 mr-1" />
                   Delete
                 </Button>
@@ -162,21 +174,41 @@ const RemediesPage = () => {
               {editingRemedy ? "Update the remedy information." : "Fill out the form below to add a new remedy."}
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleSubmit}>
-            <Label>Name</Label>
-            <Input name="name" value={formData.name} onChange={handleInputChange} required />
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <Label>Name</Label>
+              <Input name="name" value={formData.name} onChange={handleInputChange} required />
+            </div>
 
-            <Label>Category</Label>
-            <Select value={formData.category} onValueChange={(value) => handleSelectChange("category", value)}>
-              <SelectTrigger><SelectValue placeholder="Select category" /></SelectTrigger>
-              <SelectContent>{categories.map((cat) => <SelectItem key={cat} value={cat}>{cat}</SelectItem>)}</SelectContent>
-            </Select>
+            <div>
+              <Label>Category</Label>
+              <Select value={formData.category} onValueChange={(value) => handleSelectChange("category", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.map((cat) => (
+                    <SelectItem key={cat} value={cat}>
+                      {cat}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-            <Label>Ingredients (comma-separated)</Label>
-            <Textarea name="ingredients" value={formData.ingredients} onChange={handleInputChange} required />
+            <div>
+              <Label>Ingredients (comma-separated)</Label>
+              <Textarea name="ingredients" value={formData.ingredients} onChange={handleInputChange} required />
+            </div>
+            <div>
+              <Label>Description</Label>
+              <Textarea name="description" value={formData.description} onChange={handleInputChange} required />
+            </div>
 
-            <Label>Dosage</Label>
-            <Input name="dosage" value={formData.dosage} onChange={handleInputChange} required />
+            <div>
+              <Label>Dosage</Label>
+              <Input name="dosage" value={formData.dosage} onChange={handleInputChange} required />
+            </div>
 
             <DialogFooter>
               <Button type="submit">{editingRemedy ? "Update" : "Add"}</Button>
