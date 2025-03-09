@@ -33,8 +33,7 @@ Women often struggle with managing menstrual health, PCOS, pregnancy, and newbor
 HerSakhi addresses this issue by integrating AI-powered cycle analysis, Ayurvedic home remedies, pregnancy and postpartum care guidance, and a chatbot for instant health advice. By combining technology with traditional healthcare wisdom, the platform ensures personalized, sustainable, and natural self-care solutions for women.
 
 ### Demo
-[![Project Demo](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=VIDEO_ID)
-_Replace VIDEO_ID with your YouTube video ID or provide an alternative demo link_
+[![Project Demo](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://youtu.be/GnGDjfuW390)
 
 ### Live Project
 [HerSakhi](https://hersakhi.vercel.app)
@@ -84,27 +83,36 @@ npm run dev
 ## Additional Resources
 
 ### Project Timeline
-_Brief overview of your development process and milestones_
+- **Phase 1** Mar 8, 2025 (Research & Planning): Conduct in-depth research on Ayurvedic healthcare, women's health issues, and AI-driven health tracking solutions.
+- **Phase 2** Mar 8 & 9, 2025(Basic Prototype Development): Develop an MVP incorporating AI-powered menstrual and PCOS tracking along with Ayurvedic remedy suggestions.
+- **Phase 3** Mar 9, 2025 (Testing & Refinement): Conduct usability tests, gather user feedback, and enhance AI recommendations and chatbot interactions.
+- **Phase 4** Mar 9, 2025 (Deployment): Integrate pregnancy and newborn care support with a more advanced AI-driven recommendation system.
 
 ### Challenges Faced
-_Discuss technical challenges and how you overcame them_
+- **Data Availability & Accuracy:** Gathering reliable datasets for AI training while ensuring adherence to Ayurvedic principles.
+- **AI Integration with Ayurvedic Knowledge:** Bridging the gap between modern AI analytics and traditional Ayurvedic healthcare practices.
+- **User Trust & Adoption:** Encouraging users to trust AI-driven health insights and remedies by incorporating expert-reviewed content.
+- **Limited Applications in AYUSH Theme:** The integration of AI within the AYUSH (Ayurveda, Yoga, Unani, Siddha, and Homeopathy) ecosystem is still
 
 ### Future Enhancements
-_Share your vision for future development_
+- **Personalized AI Recommendations:** Enhancing AI algorithms to provide more tailored Ayurvedic solutions based on user data.
+- **Community Support & Expert Consultation:** Introducing a forum for users to connect with Ayurveda practitioners and health experts.
+- **Wearable Device Integration:** Enabling real-time health tracking through smart wearables for improved cycle and wellness monitoring.
+- **Multi-Language Support:** Expanding accessibility with support for multiple languages to reach a broader audience.
+- **Partnerships & Collaborations:** Working with Ayurvedic institutions and wellness brands to expand service offerings.
 
 ### References (if any)
 - [Reference 1](link)
-- [Reference 2](link)
 
 ---
 
 ### Submission Checklist
-- [ ] Completed all sections of this README
-- [ ] Added project demo video
-- [ ] Provided live project link
-- [ ] Ensured all team members are listed
-- [ ] Included setup instructions
-- [ ] Submitted final code to repository
+- [x] Completed all sections of this README
+- [x] Added project demo video
+- [x] Provided live project link
+- [x] Ensured all team members are listed
+- [x] Included setup instructions
+- [x] Submitted final code to repository
 
 ---
 
