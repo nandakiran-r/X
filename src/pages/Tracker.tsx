@@ -112,20 +112,22 @@ const Tracker = () => {
       });
       return;
     }
-
+  
+    const dateKey = date.toLocaleDateString('en-CA'); // Use local date in YYYY-MM-DD format
+  
     const newPeriodEntry: PeriodEntry = {
       date: dateKey,
       flow: flow
     };
-
+  
     // Check if an entry for this date already exists
     const existingEntryIndex = trackerData.periods.findIndex(p => p.date === dateKey);
-
+  
     if (existingEntryIndex >= 0) {
       // Update existing entry
       const updatedPeriods = [...trackerData.periods];
       updatedPeriods[existingEntryIndex] = newPeriodEntry;
-
+  
       setTrackerData({
         ...trackerData,
         periods: updatedPeriods
@@ -137,7 +139,25 @@ const Tracker = () => {
         periods: [...trackerData.periods, newPeriodEntry]
       });
     }
-
+  
+    // Save to trackerData localStorage
+    localStorage.setItem('trackerData', JSON.stringify({
+      ...trackerData,
+      periods: existingEntryIndex >= 0 
+        ? [...trackerData.periods.slice(0, existingEntryIndex), newPeriodEntry, ...trackerData.periods.slice(existingEntryIndex + 1)]
+        : [...trackerData.periods, newPeriodEntry]
+    }));
+  
+    // SYNC WITH DASHBOARD DATA
+    // Get existing cycle data
+    let cycleData = JSON.parse(localStorage.getItem("sakhi-cycle") || "{}");
+  
+    // Update dashboard format data
+    cycleData[dateKey] = { periodStarted: true };
+  
+    // Save updated dashboard data
+    localStorage.setItem("sakhi-cycle", JSON.stringify(cycleData));
+  
     toast({
       title: "Period Logged",
       description: `You've logged your period for ${date.toLocaleDateString()}`,
@@ -183,7 +203,7 @@ const Tracker = () => {
 
   // Function to check if a date has period data
   const isPeriodDay = (day: Date) => {
-    const dayStr = day.toISOString().split('T')[0];
+    const dayStr = day.toLocaleDateString('en-CA'); // Use local date in YYYY-MM-DD format
     return trackerData.periods.some(p => p.date === dayStr);
   };
 
@@ -191,28 +211,28 @@ const Tracker = () => {
   const getFertilityInfo = () => {
     // Sort periods by date
     if (trackerData.periods.length === 0) return null;
-
+  
     const sortedPeriods = [...trackerData.periods].sort((a, b) =>
       new Date(a.date).getTime() - new Date(b.date).getTime()
     );
-
+  
     // Use the most recent period as reference
     const lastPeriod = new Date(sortedPeriods[sortedPeriods.length - 1].date);
-
+  
     // Estimated ovulation day (14 days after period start in a 28-day cycle)
     const ovulationDay = new Date(lastPeriod);
     ovulationDay.setDate(lastPeriod.getDate() + 14);
-
+  
     // Fertility window (5 days before ovulation + day of ovulation)
     const fertilityStart = new Date(ovulationDay);
     fertilityStart.setDate(ovulationDay.getDate() - 5);
-
+  
     return {
-      ovulation: ovulationDay.toISOString().split('T')[0],
+      ovulation: ovulationDay.toLocaleDateString('en-CA'), // Use local date
       fertilityWindow: Array.from({ length: 6 }, (_, i) => {
         const day = new Date(fertilityStart);
         day.setDate(fertilityStart.getDate() + i);
-        return day.toISOString().split('T')[0];
+        return day.toLocaleDateString('en-CA'); // Use local date
       })
     };
   };
