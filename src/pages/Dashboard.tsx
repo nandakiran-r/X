@@ -17,6 +17,8 @@ import {
   Activity,
   ExternalLink,
   HelpCircle,
+  HeartHandshake,
+  Stethoscope,
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
@@ -421,6 +423,20 @@ const Dashboard = () => {
       >
         <h2 className="text-lg font-semibold">Track Today</h2>
         <div className="grid grid-cols-2 gap-3">
+
+
+          <Card
+            className="hover:shadow-md transition-shadow cursor-pointer col-span-2"
+            onClick={() => {
+              navigate("/motherandchildren");
+            }}
+          >
+            <CardContent className="p-4 flex flex-col items-center justify-center text-center">
+              <HeartHandshake className="h-8 w-8 text-red-500 mb-2" />
+              <h3 className="font-medium">Mother and Children</h3>
+            </CardContent>
+          </Card>
+
           <Card
             onClick={() => handleOpenTracker("water")}
             className="hover:shadow-md transition-shadow cursor-pointer"
@@ -481,7 +497,7 @@ const Dashboard = () => {
             }}
           >
             <CardContent className="p-4 flex flex-col items-center justify-center text-center">
-              <Activity className="h-8 w-8 text-red-500 mb-2" />
+              <Stethoscope className="h-8 w-8 text-rose-500 mb-2" />
               <h3 className="font-medium">PCOS Risk Assessment</h3>
             </CardContent>
           </Card>
@@ -530,7 +546,7 @@ const Dashboard = () => {
           onCancel={() => setShowQuestionnaire(false)}
         />
       )}
-      {}
+      { }
       {trackingType && (
         <TrackingModal
           type={trackingType}
