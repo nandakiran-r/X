@@ -34,10 +34,14 @@ Women often struggle with managing menstrual health, PCOS, pregnancy, and newbor
 HerSakhi addresses this issue by integrating AI-powered cycle analysis, Ayurvedic home remedies, pregnancy and postpartum care guidance, and a chatbot for instant health advice. By combining technology with traditional healthcare wisdom, the platform ensures personalized, sustainable, and natural self-care solutions for women.
 
 ### Demo
-[![Project Demo](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://youtu.be/A4UMdPSevTQ)
+🔗 [![Project Demo](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://youtu.be/A4UMdPSevTQ)
+
+🔗 [![Admin Panel Demo](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=X0tYhyeV1ys)
 
 ### Live Project
-[HerSakhi](https://hersakhi.vercel.app)
+🔗 [HerSakhi](https://hersakhi.vercel.app)
+
+🔗 [HerSakhi Admin](https://hersakhi-admin.vercel.app)
 
 ## Technical Implementation
 
