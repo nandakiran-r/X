@@ -18,6 +18,7 @@ import Login from "./pages/Login";
 
 // Import layouts
 import AppShell from "./components/layout/AppShell";
+import PCOSQuestionnaire from "./pages/PCOSQuestionnaire";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,7 @@ const App = () => (
           <Route path="/remedies" element={<AppShell><Remedies /></AppShell>} />
           <Route path="/chat" element={<AppShell><Chat /></AppShell>} />
           <Route path="/profile" element={<AppShell><Profile /></AppShell>} />
+          <Route path="/pcos" element={<AppShell><PCOSQuestionnaire /></AppShell>} />
           
           {/* Catch-all route */}
           <Route path="*" element={<NotFound />} />

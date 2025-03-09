@@ -30,24 +30,24 @@ const Dashboard = () => {
   const [ayurvedicTip, setAyurvedicTip] = useState({
     tip: "Loading your personalized tip...",
     extendedTip: "Loading your detailed ayurvedic recommendation...",
-    isLoading: true
+    isLoading: true,
   });
   const [showExtendedTip, setShowExtendedTip] = useState(false);
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     // Load profile data from localStorage
     const profileData = localStorage.getItem("sakhi-profile");
-    
+
     if (profileData) {
       const parsedProfile = JSON.parse(profileData);
       setProfile(parsedProfile);
-      
+
       console.log("Profile data loaded", parsedProfile);
-  
+
       // Set cycle day correctly from profile
       setCycleDay(parsedProfile.cycleLength);
-  
+
       // Calculate next period date
       const today = new Date();
       const nextDate = new Date(today);
@@ -55,24 +55,24 @@ const Dashboard = () => {
       setNextPeriod(
         nextDate.toLocaleDateString("en-US", { month: "long", day: "numeric" })
       );
-      
+
       // Get Ayurvedic tip based on profile
       getAyurvedicTip(parsedProfile);
     } else {
       navigate("/onboarding");
     }
-  
+
     setLoading(false);
   }, []);
-  
+
   const getAyurvedicTip = async (profile) => {
     const API_KEY = import.meta.env.VITE_GEMINI_API;
     const genAI = new GoogleGenerativeAI(API_KEY);
-    
+
     try {
       // Configure the model - use Gemini-1.5-pro for best results
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
-      
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+
       // Create prompt with user's profile information
       const prompt = `Generate Ayurvedic health advice for a woman with the following profile:
       - Age: ${profile.age}
@@ -85,12 +85,12 @@ const Dashboard = () => {
       2. An extended explanation (about 3-4 sentences) that provides more context and detailed guidance.
       
       Format the response as JSON with two fields: "shortTip" and "extendedTip".`;
-      
+
       // Generate content
       const result = await model.generateContent(prompt);
       const response = await result.response;
       const text = response.text();
-      
+
       // Extract JSON from the response
       // The API returns markdown code blocks, so we need to extract just the JSON part
       let jsonData;
@@ -103,36 +103,38 @@ const Dashboard = () => {
           // If no markdown, try parsing the whole text as JSON
           jsonData = JSON.parse(text);
         }
-        
+
         setAyurvedicTip({
           tip: jsonData.shortTip,
           extendedTip: jsonData.extendedTip,
-          isLoading: false
+          isLoading: false,
         });
       } catch (parseError) {
         console.error("Error parsing tip JSON:", parseError);
         // Fallback in case JSON parsing fails
         setAyurvedicTip({
           tip: "Incorporate warming, grounding spices like cinnamon and ginger into your meals to balance vata, especially during spring which can aggravate vata.",
-          extendedTip: "As a vata-dominant woman, the changeable spring season can further increase vata, potentially disrupting hormones. Including warming spices in your diet, like cinnamon, ginger, and cardamom, helps to ground vata. Establishing a regular routine with consistent mealtimes and 7-8 hours of sleep offers stability and supports your body's natural rhythms, crucial for hormonal balance.",
-          isLoading: false
+          extendedTip:
+            "As a vata-dominant woman, the changeable spring season can further increase vata, potentially disrupting hormones. Including warming spices in your diet, like cinnamon, ginger, and cardamom, helps to ground vata. Establishing a regular routine with consistent mealtimes and 7-8 hours of sleep offers stability and supports your body's natural rhythms, crucial for hormonal balance.",
+          isLoading: false,
         });
       }
     } catch (error) {
       console.error("Error fetching Ayurvedic tip:", error);
       setAyurvedicTip({
         tip: "Incorporate warming, grounding spices like cinnamon and ginger into your meals to balance vata, especially during spring which can aggravate vata.",
-        extendedTip: "As a vata-dominant woman, the changeable spring season can further increase vata, potentially disrupting hormones. Including warming spices in your diet, like cinnamon, ginger, and cardamom, helps to ground vata. Establishing a regular routine with consistent mealtimes and 7-8 hours of sleep offers stability and supports your body's natural rhythms, crucial for hormonal balance.",
-        isLoading: false
+        extendedTip:
+          "As a vata-dominant woman, the changeable spring season can further increase vata, potentially disrupting hormones. Including warming spices in your diet, like cinnamon, ginger, and cardamom, helps to ground vata. Establishing a regular routine with consistent mealtimes and 7-8 hours of sleep offers stability and supports your body's natural rhythms, crucial for hormonal balance.",
+        isLoading: false,
       });
     }
   };
-  
+
   // Helper function to get current season
   const getCurrentSeason = () => {
     const now = new Date();
     const month = now.getMonth();
-    
+
     if (month >= 2 && month <= 4) return "Spring";
     if (month >= 5 && month <= 7) return "Summer";
     if (month >= 8 && month <= 10) return "Fall";
@@ -235,16 +237,15 @@ const Dashboard = () => {
               <h3 className="font-medium">Log Sleep</h3>
             </CardContent>
           </Card>
-          <Card className="hover:shadow-md transition-shadow cursor-pointer">
+          <Card
+            className="hover:shadow-md transition-shadow cursor-pointer col-span-2"
+            onClick={() => {
+              navigate("/pcos");
+            }}
+          >
             <CardContent className="p-4 flex flex-col items-center justify-center text-center">
-              <Activity className="h-8 w-8 text-green-500 mb-2" />
-              <h3 className="font-medium">Log Exercise</h3>
-            </CardContent>
-          </Card>
-          <Card className="hover:shadow-md transition-shadow cursor-pointer col-span-2">
-            <CardContent className="p-4 flex flex-col items-center justify-center text-center">
-              <AlertCircle className="h-8 w-8 text-red-500 mb-2" />
-              <h3 className="font-medium">Log Symptoms</h3>
+              <Activity className="h-8 w-8 text-red-500 mb-2" />
+              <h3 className="font-medium">PCOS Risk Assessment</h3>
             </CardContent>
           </Card>
         </div>
@@ -262,9 +263,7 @@ const Dashboard = () => {
           </CardHeader>
           <CardContent>
             <div className={ayurvedicTip.isLoading ? "opacity-50" : ""}>
-              <p className="mb-3">
-                {ayurvedicTip.tip}
-              </p>
+              <p className="mb-3">{ayurvedicTip.tip}</p>
               {showExtendedTip && (
                 <p className="mb-3 text-sm text-muted-foreground">
                   {ayurvedicTip.extendedTip}
@@ -273,8 +272,8 @@ const Dashboard = () => {
               {ayurvedicTip.isLoading && (
                 <div className="w-6 h-6 border-2 border-t-sakhi-mint border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin mb-2"></div>
               )}
-              <Button 
-                variant="link" 
+              <Button
+                variant="link"
                 className="p-0 text-primary-foreground"
                 onClick={handleLearnMore}
               >
