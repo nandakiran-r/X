@@ -26,18 +26,27 @@ interface RemediesData {
 // Sample remedies data
 const remediesData: RemediesData = {
   pcos: [
-    { id: 1, title: "Cinnamon Tea", description: "Helps balance blood sugar levels.", ingredients: ["1 cinnamon stick", "1 cup water"], instructions: "Boil for 10 min.", dosage: "1-2 cups daily" },
-    { id: 2, title: "Fenugreek Seeds", description: "Regulates cycles & insulin.", ingredients: ["1 tbsp fenugreek seeds", "1 cup water"], instructions: "Soak overnight, consume.", dosage: "Daily for 3 months" }
+    { id: 1, title: "Cinnamon Tea", description: "Helps balance blood sugar levels and improves insulin sensitivity.", ingredients: ["1 cinnamon stick", "1 cup water"], instructions: "Boil for 10 min.", dosage: "1-2 cups daily" },
+    { id: 2, title: "Fenugreek Seeds", description: "Regulates menstrual cycles and improves insulin resistance.", ingredients: ["1 tbsp fenugreek seeds", "1 cup water"], instructions: "Soak overnight, consume in the morning.", dosage: "Daily for 3 months" },
+    { id: 7, title: "Ashoka Bark Tea", description: "Supports uterine health and regulates hormones.", ingredients: ["1 tsp Ashoka bark powder", "1 cup water"], instructions: "Boil for 5-10 min, strain, and drink.", dosage: "1 cup daily" },
+    { id: 8, title: "Shatavari Powder", description: "Balances hormones and supports reproductive health.", ingredients: ["1 tsp Shatavari powder", "1 cup warm milk or water"], instructions: "Mix and consume.", dosage: "Twice daily" }
   ],
   period: [
-    { id: 3, title: "Ginger Tea", description: "Reduces cramps and inflammation.", ingredients: ["1-inch fresh ginger", "1 cup water"], instructions: "Boil 5-10 min.", dosage: "2-3 cups during menstruation" }
+    { id: 3, title: "Ginger Tea", description: "Reduces menstrual cramps and inflammation.", ingredients: ["1-inch fresh ginger", "1 cup water"], instructions: "Boil for 5-10 min.", dosage: "2-3 cups during menstruation" },
+    { id: 9, title: "Ajwain Water", description: "Relieves bloating and menstrual pain.", ingredients: ["1 tsp ajwain (carom seeds)", "1 cup water"], instructions: "Boil for 5 min, strain, and drink.", dosage: "1-2 cups daily during menstruation" },
+    { id: 10, title: "Turmeric Milk", description: "Reduces inflammation and pain during menstruation.", ingredients: ["1/2 tsp turmeric powder", "1 cup warm milk"], instructions: "Mix and drink.", dosage: "1 cup daily during menstruation" }
   ],
   hormones: [
-    { id: 4, title: "Ashwagandha", description: "Balances hormones and reduces stress.", ingredients: ["1/2 tsp ashwagandha powder", "1 cup warm milk"], instructions: "Mix and drink.", dosage: "Before bedtime" }
+    { id: 4, title: "Ashwagandha", description: "Balances hormones, reduces stress, and supports adrenal health.", ingredients: ["1/2 tsp Ashwagandha powder", "1 cup warm milk or water"], instructions: "Mix and consume.", dosage: "Before bedtime" },
+    { id: 11, title: "Shatavari Kalpa", description: "Supports female reproductive health and hormone balance.", ingredients: ["1 tsp Shatavari powder", "1 cup warm milk or water"], instructions: "Mix and consume.", dosage: "Twice daily" },
+    { id: 12, title: "Licorice (Mulethi) Tea", description: "Regulates cortisol levels and supports hormonal balance.", ingredients: ["1 tsp licorice root powder", "1 cup water"], instructions: "Boil for 5-10 min, strain, and drink.", dosage: "1 cup daily" }
   ],
   wellness: [
-    { id: 5, title: "Lemon Honey Water", description: "Boosts digestion and detox.", ingredients: ["1 cup warm water", "1/2 lemon", "1 tsp honey"], instructions: "Mix well.", dosage: "Morning on an empty stomach" },
-    { id: 6, title: "Chamomile Tea", description: "Promotes relaxation and sleep.", ingredients: ["1 chamomile tea bag", "1 cup hot water"], instructions: "Steep for 5 min.", dosage: "Before bedtime" }
+    { id: 5, title: "Triphala Water", description: "Detoxifies the body and improves digestion.", ingredients: ["1 tsp Triphala powder", "1 cup warm water"], instructions: "Mix and drink.", dosage: "Before bedtime" },
+    { id: 6, title: "Tulsi (Holy Basil) Tea", description: "Boosts immunity and reduces stress.", ingredients: ["5-6 fresh Tulsi leaves", "1 cup water"], instructions: "Boil for 5-10 min, strain, and drink.", dosage: "1-2 cups daily" },
+    { id: 13, title: "Amla Juice", description: "Rich in Vitamin C, improves digestion, and boosts immunity.", ingredients: ["1 tbsp Amla juice", "1 cup water"], instructions: "Mix and drink.", dosage: "Morning on an empty stomach" },
+    { id: 14, title: "Ghee with Warm Water", description: "Improves digestion and detoxifies the body.", ingredients: ["1 tsp pure cow ghee", "1 cup warm water"], instructions: "Mix and drink.", dosage: "Morning on an empty stomach" },
+    { id: 15, title: "Fennel (Saunf) Water", description: "Relieves bloating and improves digestion.", ingredients: ["1 tsp fennel seeds", "1 cup water"], instructions: "Soak overnight, strain, and drink.", dosage: "Morning on an empty stomach" }
   ]
 };
 
