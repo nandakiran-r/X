@@ -30,7 +30,6 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [cycleDay, setCycleDay] = useState<number | null>(null);
   const [nextPeriod, setNextPeriod] = useState<string | null>(null);
-  const [periodActive, setPeriodActive] = useState(false);
   const [ayurvedicTip, setAyurvedicTip] = useState({
     tip: "Loading your personalized tip...",
     extendedTip: "Loading your detailed ayurvedic recommendation...",
@@ -70,65 +69,8 @@ const Dashboard = () => {
       navigate("/onboarding");
     }
 
-    calculateCycleInfo();
     setLoading(false);
   }, []);
-
-  // Calculate cycle information based on stored data
-  const calculateCycleInfo = () => {
-    const today = new Date();
-    const todayStr = today.toISOString().split("T")[0];
-    const cycleData = JSON.parse(localStorage.getItem("sakhi-cycle") || "{}");
-    
-    // Get cycle settings from profile or use defaults
-    const cycleLength = profile?.cycleLength || 28;
-    const periodLength = profile?.periodLength || 5;
-    
-    // Find the most recent period start date
-    const periodDates = Object.keys(cycleData)
-      .filter(date => cycleData[date] && cycleData[date].periodStarted === true)
-      .sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
-    
-    if (periodDates.length === 0) {
-      // No period data yet
-      setCycleDay(0);
-      setNextPeriod("Not enough data");
-      setPeriodActive(false);
-      return;
-    }
-    
-    const lastPeriodStart = new Date(periodDates[0]);
-    
-    // Calculate days since last period started - FIX: use getTime() to get number type
-    const daysSinceStart = Math.floor(
-      (today.getTime() - lastPeriodStart.getTime()) / (1000 * 60 * 60 * 24)
-    );
-    
-    // Determine if currently on period
-    const isOnPeriod = daysSinceStart < periodLength;
-    setPeriodActive(isOnPeriod);
-    
-    // Calculate cycle day (1-based)
-    const currentCycleDay = (daysSinceStart % cycleLength) + 1;
-    setCycleDay(currentCycleDay);
-    
-    // Calculate next period date
-    const daysUntilNextPeriod = isOnPeriod 
-      ? cycleLength - daysSinceStart 
-      : cycleLength - (daysSinceStart % cycleLength);
-    
-    const nextPeriodDate = new Date(today);
-    nextPeriodDate.setDate(today.getDate() + daysUntilNextPeriod);
-    
-    setNextPeriod(
-      nextPeriodDate.toLocaleDateString("en-US", { month: "long", day: "numeric" })
-    );
-    
-    // Check if period started today
-    if (cycleData[todayStr] && cycleData[todayStr].periodStarted === true) {
-      setPeriodActive(true);
-    }
-  };
 
   const getAyurvedicTip = async (profile: any) => {
     const API_KEY = import.meta.env.VITE_GEMINI_API;
@@ -222,41 +164,26 @@ const Dashboard = () => {
     const today = new Date();
     const date = today.toISOString().split("T")[0];
 
-    // Get existing cycle data
     let cycleData = JSON.parse(localStorage.getItem("sakhi-cycle") || "{}");
 
-    // Check if we're logging a new period or ending current one
-    if (periodActive && cycleDay <= (profile?.periodLength || 5)) {
-      // User is ending period early
-      cycleData[date] = { periodEnded: true };
-      setPeriodActive(false);
-      toast({
-        title: "Period Ended",
-        description: "We've updated your cycle tracking",
-      });
-    } else {
-      // Starting a new period
-      cycleData[date] = { periodStarted: true };
-      setPeriodActive(true);
-      
-      // Reset cycle day to 1
-      setCycleDay(1);
-      
-      // Calculate next period date
-      const nextDate = new Date(today);
-      nextDate.setDate(today.getDate() + (profile?.cycleLength || 28));
-      setNextPeriod(
-        nextDate.toLocaleDateString("en-US", { month: "long", day: "numeric" })
-      );
-      
-      toast({
-        title: "Period Started",
-        description: "We've updated your cycle tracking",
-      });
-    }
-    
-    // Save updated data
+    // Record period start
+    cycleData[date] = { periodStarted: true };
     localStorage.setItem("sakhi-cycle", JSON.stringify(cycleData));
+
+    // Reset cycle day to 1
+    setCycleDay(1);
+
+    // Calculate next period date
+    const nextDate = new Date(today);
+    nextDate.setDate(today.getDate() + (profile?.cycleLength || 28)); // Use user's cycle length
+    setNextPeriod(
+      nextDate.toLocaleDateString("en-US", { month: "long", day: "numeric" })
+    );
+
+    toast({
+      title: "Period Started",
+      description: "We've updated your cycle tracking",
+    });
   };
 
   const handleLearnMore = () => {
@@ -327,39 +254,39 @@ const Dashboard = () => {
         transition={{ delay: 0.1, duration: 0.5 }}
         className="mb-6"
       >
-         <Card className="bg-sakhi-lavender/20 border-sakhi-lavender">
-      <CardContent className="p-4">
-        <div className="flex justify-between items-center">
-          <div>
-            <h3 className="font-medium">Cycle Day</h3>
-            <div className="text-3xl font-bold">{cycleDay || "–"}</div>
-            <p className="text-sm text-muted-foreground">
-              {periodActive ? `Period day ${cycleDay}` : `Next period: ${nextPeriod}`}
-            </p>
-          </div>
-          <div className="w-16 h-16 rounded-full bg-sakhi-lavender flex items-center justify-center">
-            <Calendar className="h-8 w-8 text-primary-foreground" />
-          </div>
-        </div>
-        <div className="mt-4 flex space-x-2">
-          <Button
-            onClick={handleLogPeriod}
-            size="sm"
-            className="bg-sakhi-pink hover:bg-sakhi-pink/90 text-secondary-foreground"
-          >
-            <Plus className="h-4 w-4 mr-1" />
-            {periodActive ? "End Period" : "Log Period"}
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => navigate("/tracker")}
-          >
-            View Cycle
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+        <Card className="bg-sakhi-lavender/20 border-sakhi-lavender">
+          <CardContent className="p-4">
+            <div className="flex justify-between items-center">
+              <div>
+                <h3 className="font-medium">Cycle Day</h3>
+                <div className="text-3xl font-bold">{cycleDay}</div>
+                <p className="text-sm text-muted-foreground">
+                  Next period: {nextPeriod}
+                </p>
+              </div>
+              <div className="w-16 h-16 rounded-full bg-sakhi-lavender flex items-center justify-center">
+                <Calendar className="h-8 w-8 text-primary-foreground" />
+              </div>
+            </div>
+            <div className="mt-4 flex space-x-2">
+              <Button
+                onClick={handleLogPeriod}
+                size="sm"
+                className="bg-sakhi-pink hover:bg-sakhi-pink/90 text-secondary-foreground"
+              >
+                <Plus className="h-4 w-4 mr-1" />
+                Log Period
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate("/tracker")}
+              >
+                View Cycle
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </motion.div>
 
       <motion.div
@@ -389,7 +316,17 @@ const Dashboard = () => {
               <h3 className="font-medium">Log Sleep</h3>
             </CardContent>
           </Card>
-       
+          <Card
+            className="hover:shadow-md transition-shadow cursor-pointer col-span-2"
+            onClick={() => {
+              navigate("/pcos");
+            }}
+          >
+            <CardContent className="p-4 flex flex-col items-center justify-center text-center">
+              <Activity className="h-8 w-8 text-red-500 mb-2" />
+              <h3 className="font-medium">PCOS Risk Assessment</h3>
+            </CardContent>
+          </Card>
           <Card
             onClick={() => handleOpenTracker("exercise")}
             className="hover:shadow-md transition-shadow cursor-pointer"
@@ -402,22 +339,11 @@ const Dashboard = () => {
 
           <Card
             onClick={() => handleOpenTracker("symptoms")}
-            className="hover:shadow-md transition-shadow cursor-pointer col-span-1"
+            className="hover:shadow-md transition-shadow cursor-pointer col-span-2"
           >
             <CardContent className="p-4 flex flex-col items-center justify-center text-center">
               <AlertCircle className="h-8 w-8 text-red-500 mb-2" />
               <h3 className="font-medium">Log Symptoms</h3>
-            </CardContent>
-          </Card>
-          <Card
-            className="hover:shadow-md transition-shadow cursor-pointer col-span-2"
-            onClick={() => {
-              navigate("/pcos");
-            }}
-          >
-            <CardContent className="p-4 flex flex-col items-center justify-center text-center">
-              <Activity className="h-8 w-8 text-red-500 mb-2" />
-              <h3 className="font-medium">PCOS Risk Assessment</h3>
             </CardContent>
           </Card>
         </div>
