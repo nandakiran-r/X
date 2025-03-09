@@ -57,9 +57,7 @@ _Replace VIDEO_ID with your YouTube video ID or provide an alternative demo link
 ## Setup Instructions
 
 ### Prerequisites
-- Requirement 1
-- Requirement 2
-- Requirement 3
+- Node >= v14.18
 
 ### Installation 
 ```bash
@@ -67,9 +65,19 @@ git clone https://github.com/nandakiran-r/X.git
 
 ```
 
+```bash
+cd X
+
+```
+
+```bash
+npm install
+
+```
+
 ### Running the Project
 ```bash
-cd X && npm run dev
+npm run dev
 
 ```
 
