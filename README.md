@@ -79,6 +79,19 @@ npm run dev
 
 ```
 
+### Building & Deploying the Project
+
+#### Building the Project
+```bash
+npm run build
+```
+
+#### Serving the Project Locally
+```bash
+npm install -g serve
+serve -s dist/
+```
+
 ## Additional Resources
 
 ### Project Timeline
