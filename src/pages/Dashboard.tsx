@@ -219,11 +219,11 @@ const Dashboard = () => {
 
   const handleLogPeriod = () => {
     const today = new Date();
-    const date = today.toISOString().split("T")[0];
-
+    const date = today.toLocaleDateString('en-CA'); // Use local date in YYYY-MM-DD format
+  
     // Get existing cycle data
     let cycleData = JSON.parse(localStorage.getItem("sakhi-cycle") || "{}");
-
+  
     // Check if we're logging a new period or ending current one
     if (periodActive && cycleDay <= (profile?.periodLength || 5)) {
       // User is ending period early
@@ -237,25 +237,50 @@ const Dashboard = () => {
       // Starting a new period
       cycleData[date] = { periodStarted: true };
       setPeriodActive(true);
-      
+  
       // Reset cycle day to 1
       setCycleDay(1);
-      
+  
       // Calculate next period date
       const nextDate = new Date(today);
       nextDate.setDate(today.getDate() + (profile?.cycleLength || 28));
       setNextPeriod(
         nextDate.toLocaleDateString("en-US", { month: "long", day: "numeric" })
       );
-      
+  
       toast({
         title: "Period Started",
         description: "We've updated your cycle tracking",
       });
     }
-    
-    // Save updated data
+  
+    // Save updated data for Dashboard
     localStorage.setItem("sakhi-cycle", JSON.stringify(cycleData));
+  
+    // SYNC WITH TRACKER DATA
+    // Get existing tracker data
+    let trackerData = JSON.parse(localStorage.getItem('trackerData') || '{"periods":[],"symptoms":{}}');
+  
+    // Check if we already have this date in periods
+    const existingPeriodIndex = trackerData.periods.findIndex(p => p.date === date);
+  
+    if (existingPeriodIndex >= 0) {
+      // If we're ending a period, remove it from the tracker
+      if (periodActive) {
+        trackerData.periods.splice(existingPeriodIndex, 1);
+      }
+    } else {
+      // If starting a new period, add it to tracker with medium flow as default
+      if (!periodActive) {
+        trackerData.periods.push({
+          date: date,
+          flow: "Medium" // Default flow intensity
+        });
+      }
+    }
+  
+    // Save updated tracker data
+    localStorage.setItem('trackerData', JSON.stringify(trackerData));
   };
 
   const handleLearnMore = () => {
@@ -331,7 +356,7 @@ const Dashboard = () => {
         <div className="flex justify-between items-center">
           <div>
             <h3 className="font-medium">Cycle Day</h3>
-            <div className="text-3xl font-bold">{cycleDay || "–"}</div>
+            <div className="text-3xl font-bold">{profile?.cycleLength}</div>
             <p className="text-sm text-muted-foreground">
               {periodActive ? `Period day ${cycleDay}` : `Next period: ${nextPeriod}`}
             </p>
