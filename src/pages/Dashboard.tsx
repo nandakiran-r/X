@@ -331,7 +331,7 @@ const Dashboard = () => {
         <div className="flex justify-between items-center">
           <div>
             <h3 className="font-medium">Cycle Day</h3>
-            <div className="text-3xl font-bold">{cycleDay || "–"}</div>
+            <div className="text-3xl font-bold">{cycleDay}</div>
             <p className="text-sm text-muted-foreground">
               {periodActive ? `Period day ${cycleDay}` : `Next period: ${nextPeriod}`}
             </p>
