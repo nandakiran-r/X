@@ -35,6 +35,7 @@ HerSakhi addresses this issue by integrating AI-powered cycle analysis, Ayurvedi
 
 ### Demo
 [![Project Demo](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://youtu.be/A4UMdPSevTQ)
+[![Admin Panel Demo]](https://www.youtube.com/watch?v=X0tYhyeV1ys)
 
 ### Live Project
 [HerSakhi](https://hersakhi.vercel.app)
