@@ -4,20 +4,57 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>HerSakhi - AI-Powered Ayurveda & PCOS Companion</title>
-  <meta name="description"
-    content="Your personal AI-powered Ayurvedic companion for women's health and PCOS management" />
+  
+  <meta name="description" content="HerSakhi is your AI-powered Ayurvedic health companion, designed to help women manage PCOS, hormonal balance, and overall well-being naturally." />
+  <meta name="keywords" content="Ayurveda, PCOS, women's health, hormonal balance, AI health assistant, natural remedies, holistic wellness, Ayurvedic medicine, menstrual health" />
   <meta name="author" content="HerSakhi" />
+
+  <!-- Open Graph for social media sharing -->
+  <meta property="og:title" content="HerSakhi - AI-Powered Ayurveda & PCOS Companion" />
+  <meta property="og:description" content="AI-driven Ayurvedic health insights for women. Manage PCOS, hormones, and wellness naturally." />
   <meta property="og:image" content="/og-image.png" />
+  <meta property="og:url" content="https://www.hersakhi.com" />
+  <meta property="og:type" content="website" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="HerSakhi - AI-Powered Ayurveda & PCOS Companion" />
+  <meta name="twitter:description" content="Your AI-driven Ayurvedic guide for women's health and PCOS management." />
+  <meta name="twitter:image" content="/og-image.png" />
+  
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+
+  <!-- Preload fonts for better performance -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" as="style">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Web App Manifest -->
   <link rel="manifest" href="manifest.json">
+  
+  <!-- Structured Data for better Google SEO -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "HerSakhi",
+      "url": "https://www.hersakhi.vercel.app",
+      "logo": "/logo.png",
+      "description": "An AI-powered Ayurveda-based health companion for women to manage PCOS, hormonal balance, and wellness.",
+    }
+  </script>
 </head>
 
 <body>
   <div id="root"></div>
-  <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
+  
+  <!-- GPT Engine (Do not remove) -->
   <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+  
+  <!-- Main React App -->
   <script type="module" src="/src/main.tsx"></script>
 </body>
 
