@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -16,51 +15,82 @@ interface TrackingModalProps {
 
 const TrackingModal = ({ type, onClose }: TrackingModalProps) => {
   const { toast } = useToast();
-  const [waterAmount, setWaterAmount] = useState(4);
-  const [sleepHours, setSleepHours] = useState(7);
-  const [exerciseMinutes, setExerciseMinutes] = useState(30);
+  const [waterAmount, setWaterAmount] = useState(
+    Number(localStorage.getItem("waterIntake")) || 4
+  );
+  const [sleepHours, setSleepHours] = useState(
+    Number(localStorage.getItem("sleepHours")) || 7
+  );
+  const [exerciseMinutes, setExerciseMinutes] = useState(
+    Number(localStorage.getItem("exerciseMinutes")) || 30
+  );
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
   const [symptomNotes, setSymptomNotes] = useState("");
 
   const symptoms = [
-    "Cramps", "Bloating", "Headache", "Fatigue", 
-    "Mood swings", "Acne", "Back pain", "Nausea"
+    "Cramps",
+    "Bloating",
+    "Headache",
+    "Fatigue",
+    "Mood swings",
+    "Acne",
+    "Back pain",
+    "Nausea",
   ];
 
+  useEffect(() => {
+    const savedSymptoms = JSON.parse(localStorage.getItem("selectedSymptoms") || "[]");
+    setSelectedSymptoms(savedSymptoms);
+  }, []);
+
+  
   const handleSubmit = () => {
-    const date = new Date().toISOString().split('T')[0];
-    
-    let existingData = JSON.parse(localStorage.getItem('sakhi-tracking') || '{}');
+    const date = new Date().toISOString().split("T")[0];
+
+    let existingData = JSON.parse(
+      localStorage.getItem("sakhi-tracking") || "{}"
+    );
+
     if (!existingData[date]) {
       existingData[date] = {};
     }
 
     let message = "";
-    
+
     switch (type) {
       case "water":
         existingData[date].water = waterAmount;
+        localStorage.setItem("waterIntake", JSON.stringify(waterAmount)); // Save latest water intake
         message = `Logged ${waterAmount} glasses of water`;
         break;
       case "sleep":
         existingData[date].sleep = sleepHours;
+        localStorage.setItem("sleepHours", JSON.stringify(sleepHours)); // Save latest sleep hours
         message = `Logged ${sleepHours} hours of sleep`;
         break;
       case "exercise":
         existingData[date].exercise = exerciseMinutes;
+        localStorage.setItem(
+          "exerciseMinutes",
+          JSON.stringify(exerciseMinutes)
+        ); // Save latest exercise minutes
         message = `Logged ${exerciseMinutes} minutes of exercise`;
         break;
       case "symptoms":
         existingData[date].symptoms = {
           list: selectedSymptoms,
-          notes: symptomNotes
+          notes: symptomNotes,
         };
+        localStorage.setItem(
+          "selectedSymptoms",
+          JSON.stringify(selectedSymptoms)
+        );
         message = "Symptoms logged successfully";
         break;
     }
 
-    localStorage.setItem('sakhi-tracking', JSON.stringify(existingData));
-    
+    localStorage.setItem("sakhi-tracking", JSON.stringify(existingData));
+
     toast({
       title: "Tracking Updated",
       description: message,
@@ -70,21 +100,31 @@ const TrackingModal = ({ type, onClose }: TrackingModalProps) => {
   };
 
   const toggleSymptom = (symptom: string) => {
+    let updatedSymptoms = [];
+  
     if (selectedSymptoms.includes(symptom)) {
-      setSelectedSymptoms(selectedSymptoms.filter(s => s !== symptom));
+      updatedSymptoms = selectedSymptoms.filter((s) => s !== symptom); // Remove if already selected
     } else {
-      setSelectedSymptoms([...selectedSymptoms, symptom]);
+      updatedSymptoms = [...selectedSymptoms, symptom]; // Add if not selected
     }
+  
+    setSelectedSymptoms(updatedSymptoms);
+    localStorage.setItem("selectedSymptoms", JSON.stringify(updatedSymptoms)); // Save selection
   };
+  
 
   const renderContent = () => {
     switch (type) {
       case "water":
         return (
           <>
-            <h3 className="text-lg font-medium mb-4">How many glasses of water did you drink today?</h3>
+            <h3 className="text-lg font-medium mb-4">
+              How many glasses of water did you drink today?
+            </h3>
             <div className="mb-4">
-              <div className="text-center mb-2 text-2xl font-bold">{waterAmount}</div>
+              <div className="text-center mb-2 text-2xl font-bold">
+                {waterAmount}
+              </div>
               <Slider
                 value={[waterAmount]}
                 min={0}
@@ -96,13 +136,17 @@ const TrackingModal = ({ type, onClose }: TrackingModalProps) => {
             </div>
           </>
         );
-      
+
       case "sleep":
         return (
           <>
-            <h3 className="text-lg font-medium mb-4">How many hours did you sleep last night?</h3>
+            <h3 className="text-lg font-medium mb-4">
+              How many hours did you sleep last night?
+            </h3>
             <div className="mb-4">
-              <div className="text-center mb-2 text-2xl font-bold">{sleepHours} hours</div>
+              <div className="text-center mb-2 text-2xl font-bold">
+                {sleepHours} hours
+              </div>
               <Slider
                 value={[sleepHours]}
                 min={0}
@@ -114,13 +158,17 @@ const TrackingModal = ({ type, onClose }: TrackingModalProps) => {
             </div>
           </>
         );
-        
+
       case "exercise":
         return (
           <>
-            <h3 className="text-lg font-medium mb-4">How many minutes did you exercise today?</h3>
+            <h3 className="text-lg font-medium mb-4">
+              How many minutes did you exercise today?
+            </h3>
             <div className="mb-4">
-              <div className="text-center mb-2 text-2xl font-bold">{exerciseMinutes} minutes</div>
+              <div className="text-center mb-2 text-2xl font-bold">
+                {exerciseMinutes} minutes
+              </div>
               <Slider
                 value={[exerciseMinutes]}
                 min={0}
@@ -132,17 +180,21 @@ const TrackingModal = ({ type, onClose }: TrackingModalProps) => {
             </div>
           </>
         );
-        
+
       case "symptoms":
         return (
           <>
-            <h3 className="text-lg font-medium mb-4">Select any symptoms you're experiencing:</h3>
+            <h3 className="text-lg font-medium mb-4">
+              Select any symptoms you're experiencing:
+            </h3>
             <div className="grid grid-cols-2 gap-2 mb-4">
-              {symptoms.map(symptom => (
+              {symptoms.map((symptom) => (
                 <Button
                   key={symptom}
                   type="button"
-                  variant={selectedSymptoms.includes(symptom) ? "default" : "outline"}
+                  variant={
+                    selectedSymptoms.includes(symptom) ? "default" : "outline"
+                  }
                   onClick={() => toggleSymptom(symptom)}
                   className="justify-start"
                 >
@@ -152,7 +204,7 @@ const TrackingModal = ({ type, onClose }: TrackingModalProps) => {
             </div>
             <div className="mb-4">
               <Label htmlFor="notes">Additional notes:</Label>
-              <Input 
+              <Input
                 id="notes"
                 value={symptomNotes}
                 onChange={(e) => setSymptomNotes(e.target.value)}
@@ -167,10 +219,14 @@ const TrackingModal = ({ type, onClose }: TrackingModalProps) => {
 
   const getTitle = () => {
     switch (type) {
-      case "water": return "Log Water Intake";
-      case "sleep": return "Log Sleep";
-      case "exercise": return "Log Exercise";
-      case "symptoms": return "Log Symptoms";
+      case "water":
+        return "Log Water Intake";
+      case "sleep":
+        return "Log Sleep";
+      case "exercise":
+        return "Log Exercise";
+      case "symptoms":
+        return "Log Symptoms";
     }
   };
 
@@ -190,9 +246,11 @@ const TrackingModal = ({ type, onClose }: TrackingModalProps) => {
         </CardHeader>
         <CardContent>
           {renderContent()}
-          
+
           <div className="flex justify-end space-x-2 mt-4">
-            <Button variant="outline" onClick={onClose}>Cancel</Button>
+            <Button variant="outline" onClick={onClose}>
+              Cancel
+            </Button>
             <Button onClick={handleSubmit}>Save</Button>
           </div>
         </CardContent>
