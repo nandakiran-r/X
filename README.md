@@ -17,10 +17,10 @@ The official template repository for Define 3.0
 ### Team Members
 | Name | Role | GitHub | LinkedIn |
 |------|------|--------|----------|
-| Nandakiran R | Backend | [@nandakiran-r](https://github.com/nandakiran-r) | [Profile](https://www.linkedin.com/in/nandakiran-r) |
-| Muhammed Shamil | Frontent | [@muhammedshamil8](https://github.com/muhammedshamil8) | [Profile](https://www.linkedin.com/in/muhammed-shamil-65878227a/) |
-| Muhammed Rizwan | ppt & ui/u | [@rizwnkt](https://github.com/rizwnkt) | [Profile](https://www.linkedin.com/in/mhdrizwankt/) |
-| Alex | Ai&Ml | [@Alexjmathew](https://github.com/Alexjmathew) | [Profile](https://linkedin.com/in/username) |
+| Nandakiran R | Back-end | [@nandakiran-r](https://github.com/nandakiran-r) | [Profile](https://www.linkedin.com/in/nandakiran-r) |
+| Muhammed Shamil | Front-end | [@muhammedshamil8](https://github.com/muhammedshamil8) | [Profile](https://www.linkedin.com/in/muhammed-shamil-65878227a/) |
+| Muhammed Rizwan | Presentation & UI/UX | [@rizwnkt](https://github.com/rizwnkt) | [Profile](https://www.linkedin.com/in/mhdrizwankt/) |
+| Alex | Absent | [@Alexjmathew](https://github.com/Alexjmathew) | [Profile](https://linkedin.com/in/username) |
 
 ## Project Details
 
@@ -43,11 +43,9 @@ HerSakhi addresses this issue by integrating AI-powered cycle analysis, Ayurvedi
 
 ### Technologies Used
 - **Frontend**: React js
-- **Backend**: Nodejs
+- **Backend**: Nodejs (Express)
 - **Database**: Firebase
-- **APIs**: [Technologies]
-- **DevOps**: [Technologies]
-- **Other Tools**: [Technologies]
+- **APIs**: Llama-3.3-70B-Instruct-Turbo [Together AI], Gemini API
 
 ### Key Features
 - **AI-Powered Cycle Tracking** – Smart menstrual and PCOS tracking with AI-driven insights for better health management.
