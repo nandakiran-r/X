@@ -48,6 +48,12 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (profile) {
+      getAyurvedicTip(profile);
+    }
+  }, [profile]);
+
+  useEffect(() => {
     const profileData = localStorage.getItem("sakhi-profile");
 
     if (profileData) {
