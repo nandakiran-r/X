@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { SearchIcon, Leaf, BookmarkPlus, BookmarkCheck, Heart } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import {db} from "@/config/firebase";
 
 interface Remedy {
   id: number;
