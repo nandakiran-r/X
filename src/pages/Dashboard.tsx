@@ -48,33 +48,38 @@ const Dashboard = () => {
   useEffect(() => {
     // Load profile data from localStorage
     const profileData = localStorage.getItem("sakhi-profile");
-
+  
     if (profileData) {
       const parsedProfile = JSON.parse(profileData);
       setProfile(parsedProfile);
-
+  
       console.log("Profile data loaded", parsedProfile);
-
+  
       // Set cycle day correctly from profile
       setCycleDay(parsedProfile.cycleLength);
-
-      // Calculate next period date
+  
+      // Correct method to calculate next period date
       const today = new Date();
-      const nextDate = new Date(today);
-      nextDate.setDate(today.getDate() + parsedProfile.cycleLength); // Use user's cycle length
+      const nextDate = new Date(today.getTime()); // Clone the current date
+  
+      // Add cycle length in milliseconds to avoid month issues
+      nextDate.setTime(today.getTime() + parsedProfile.cycleLength * 24 * 60 * 60 * 1000);
+  
+      console.log("Next period calculated:", nextDate);
+  
       setNextPeriod(
         nextDate.toLocaleDateString("en-US", { month: "long", day: "numeric" })
       );
-
+  
       // Get Ayurvedic tip based on profile
       getAyurvedicTip(parsedProfile);
     } else {
       navigate("/onboarding");
     }
-
-    // calculateCycleInfo();
+  
     setLoading(false);
   }, []);
+  
 
   // Calculate cycle information based on stored data
   const calculateCycleInfo = () => {
@@ -226,73 +231,68 @@ const Dashboard = () => {
 
   const handleLogPeriod = () => {
     const today = new Date();
-    const date = today.toLocaleDateString("en-CA"); // Use local date in YYYY-MM-DD format
-
+    const date = today.toLocaleDateString("en-CA"); // Format as YYYY-MM-DD
+  
     // Get existing cycle data
     let cycleData = JSON.parse(localStorage.getItem("sakhi-cycle") || "{}");
-
-    // Check if we're logging a new period or ending current one
+  
     if (periodActive && cycleDay <= (profile?.periodLength || 5)) {
-      // User is ending period early
+      // 🛑 Ending period early
       cycleData[date] = { periodEnded: true };
       setPeriodActive(false);
+  
       toast({
         title: "Period Ended",
         description: "We've updated your cycle tracking",
       });
     } else {
-      // Starting a new period
+      // ✅ Starting a new period
       cycleData[date] = { periodStarted: true };
       setPeriodActive(true);
-
+  
       // Reset cycle day to 1
       setCycleDay(1);
-
-      // Calculate next period date
-      const nextDate = new Date(today);
-      nextDate.setDate(today.getDate() + (profile?.cycleLength || 28));
+  
+      // 🚀 Correct next period calculation
+      const nextDate = new Date(today.getTime());
+      nextDate.setTime(today.getTime() + (profile?.cycleLength || 28) * 24 * 60 * 60 * 1000);
+  
       setNextPeriod(
         nextDate.toLocaleDateString("en-US", { month: "long", day: "numeric" })
       );
-
+  
       toast({
         title: "Period Started",
         description: "We've updated your cycle tracking",
       });
     }
-
-    // Save updated data for Dashboard
+  
+    // Save updated cycle data
     localStorage.setItem("sakhi-cycle", JSON.stringify(cycleData));
-
-    // SYNC WITH TRACKER DATA
-    // Get existing tracker data
+  
+    // 🩸 SYNC WITH TRACKER DATA 🩸
     let trackerData = JSON.parse(
       localStorage.getItem("trackerData") || '{"periods":[],"symptoms":{}}'
     );
-
-    // Check if we already have this date in periods
+  
     const existingPeriodIndex = trackerData.periods.findIndex(
       (p) => p.date === date
     );
-
+  
     if (existingPeriodIndex >= 0) {
-      // If we're ending a period, remove it from the tracker
       if (periodActive) {
-        trackerData.periods.splice(existingPeriodIndex, 1);
+        trackerData.periods.splice(existingPeriodIndex, 1); // Remove if period ended
       }
     } else {
-      // If starting a new period, add it to tracker with medium flow as default
       if (!periodActive) {
-        trackerData.periods.push({
-          date: date,
-          flow: "Medium", // Default flow intensity
-        });
+        trackerData.periods.push({ date: date, flow: "Medium" }); // Default flow
       }
     }
-
-    // Save updated tracker data
+  
+    // Save tracker data
     localStorage.setItem("trackerData", JSON.stringify(trackerData));
   };
+  
 
   const handleLearnMore = () => {
     setShowExtendedTip(!showExtendedTip);
