@@ -407,14 +407,15 @@ const Dashboard = () => {
           <Card
             className="hover:shadow-md transition-shadow cursor-pointer col-span-2"
             onClick={() => {
-              navigate("/motherandchildren");
+              navigate("/pcos");
             }}
           >
             <CardContent className="p-4 flex flex-col items-center justify-center text-center">
-              <HeartHandshake className="h-8 w-8 text-red-500 mb-2" />
-              <h3 className="font-medium">Mother and Children</h3>
+              <Stethoscope className="h-8 w-8 text-rose-500 mb-2" />
+              <h3 className="font-medium">PCOS Risk Assessment</h3>
             </CardContent>
           </Card>
+
 
           <Card
             onClick={() => handleOpenTracker("water")}
@@ -469,15 +470,16 @@ const Dashboard = () => {
             </CardContent>
           </Card>
 
+
           <Card
             className="hover:shadow-md transition-shadow cursor-pointer col-span-2"
             onClick={() => {
-              navigate("/pcos");
+              navigate("/motherandchildren");
             }}
           >
             <CardContent className="p-4 flex flex-col items-center justify-center text-center">
-              <Stethoscope className="h-8 w-8 text-rose-500 mb-2" />
-              <h3 className="font-medium">PCOS Risk Assessment</h3>
+              <HeartHandshake className="h-8 w-8 text-red-500 mb-2" />
+              <h3 className="font-medium">Mother and Children</h3>
             </CardContent>
           </Card>
         </div>
