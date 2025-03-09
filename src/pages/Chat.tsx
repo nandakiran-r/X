@@ -32,8 +32,7 @@ const getGeminiResponse = async (userMessage: string, chatHistory: Message[]) =>
   const genAI = new GoogleGenerativeAI(API_KEY);
 
   try {
-    // Configure the model - use Gemini-1.5-pro for best results with this use case
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
     
     // Prepare chat history for Gemini in the required format
     const formattedHistory = chatHistory

@@ -147,8 +147,7 @@ const Dashboard = () => {
     const genAI = new GoogleGenerativeAI(API_KEY);
 
     try {
-      // Configure the model - use Gemini-1.5-pro for best results
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
       // Create prompt with user's profile information
       const prompt = `Generate Ayurvedic health advice for a woman with the following profile:
