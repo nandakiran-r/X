@@ -7,7 +7,8 @@ The official template repository for Define 3.0
 
 
 # HerSakhi
- Cover Image  If applicable
+![Screenshot 2025-03-09 at 09-09-25 HerSakhi fn - HerSakhi fn pdf](https://github.com/user-attachments/assets/6db115e0-946a-46d9-84b5-3f7e9f671d11)
+
 
 ### Team Information
 - **Team Name**: X
